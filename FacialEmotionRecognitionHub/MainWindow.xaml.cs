@@ -29,12 +29,17 @@ namespace FacialEmotionRecognitionHub
             ExtendsContentIntoTitleBar = true;
             SetTitleBar(AppTitleBar);
         }
-        private void AppTitleBar_BackRequested(TitleBar sender, object args)
+
+        void MainTabView_TabCloseRequested(TabView sender, TabViewTabCloseRequestedEventArgs args)
         {
-            if (rootFrame.CanGoBack == true)
-            {
-                rootFrame.GoBack();
-            }
+            sender.TabItems.Remove(args.Tab);
         }
+        //private void AppTitleBar_BackRequested(TitleBar sender, object args)
+        //{
+        //    if (rootFrame.CanGoBack == true)
+        //    {
+        //        rootFrame.GoBack();
+        //    }
+        //}
     }
 }

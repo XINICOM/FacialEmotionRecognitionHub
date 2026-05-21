@@ -8,9 +8,9 @@
         mc:Ignorable="d"
         Title="FacialEmotionRecognitionHub">
 
-    <Window.SystemBackdrop>
+    <!--<Window.SystemBackdrop>
         <MicaBackdrop />
-    </Window.SystemBackdrop>
+    </Window.SystemBackdrop>-->
 
     <Grid>
         <Grid.RowDefinitions>
@@ -19,18 +19,28 @@
         </Grid.RowDefinitions>
         <TitleBar x:Name="AppTitleBar"
                   Title="Facial Emotion Recognition Hub"
-                  IsBackButtonVisible="False"
-                  IsBackButtonEnabled="{x:Bind rootFrame.CanGoBack, Mode=OneWay}"
-                  BackRequested="AppTitleBar_BackRequested">
+                  IsBackButtonVisible="False">
             <!--<TitleBar.IconSource>
                 <FontIconSource Glyph="&#xF4AA;" />
             </TitleBar.IconSource>-->
         </TitleBar>
-
         <!-- App content -->
         <!--<Frame x:Name="rootFrame" Grid.Row="1"/>-->
         <!--<Frame x:Name="rootFrame" Grid.Row="1" SourcePageType="views:NotePage"/>-->
-        <Frame x:Name="rootFrame"
-               Grid.Row="1" />
+        <!--<Frame x:Name="rootFrame"
+               Grid.Row="1" />-->
+        <TabView x:Name="MainTabView"
+                 AllowDropTabs="True"
+                 TabCloseRequested="MainTabView_TabCloseRequested"
+                 Grid.Row="1"><!--CanTearOutTabs="True"-->
+            <TabViewItem Header="首页"
+                         Content="欢迎使用我的应用！"
+                         CanDrag="False"
+                         IsClosable="False"/>
+            <TabViewItem Header="设置"
+                         Content="个性化配置选项" />
+            <TabViewItem Header="关于"
+                         Content="版本信息和帮助" />
+        </TabView>
     </Grid>
 </Window>
