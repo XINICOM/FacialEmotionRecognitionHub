@@ -4,6 +4,9 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using FacialEmotionRecognitionHub.Bus;
+using FacialEmotionRecognitionHub.Bus.ViewModels;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
@@ -24,15 +27,21 @@ namespace FacialEmotionRecognitionHub
     /// </summary>
     public sealed partial class MainWindow : Window
     {
+        private TabViewVM? tabViewVM;
         public MainWindow()
         {
             InitializeComponent();
+            //自定义 titlebar
             ExtendsContentIntoTitleBar = true;
             SetTitleBar(AppTitleBar);
+            tabViewVM = App.Current.Services.GetService<TabViewVM>();
+            if (tabViewVM is not null)
+                tabViewVM.LoadTabViewItems();
+
         }
 
         /// <summary>
-        /// 关闭tab
+        /// 关闭 tab
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="args"></param>
@@ -42,5 +51,14 @@ namespace FacialEmotionRecognitionHub
             sender.TabItems.Remove(args.Tab);
         }
 
+        private void MainTabView_AddTabButtonClick(TabView sender, object args)
+        {
+            if (tabViewVM is not null)
+            {
+                tabViewVM.CreatNewAiModel();
+                tabViewVM.LoadTabViewItems();
+            }
+            
+        }
     }
 }

@@ -39,7 +39,9 @@
         <TabView x:Name="MainTabView"
                  CanDragTabs="True"
                  TabCloseRequested="MainTabView_TabCloseRequested"
-                 Grid.Row="1">
+                 AddTabButtonClick="MainTabView_AddTabButtonClick"
+                 Grid.Row="1"
+                 TabItemsSource="{x:Bind tabViewVM.TabViewItems}">
             <TabViewItem Header="首页"
                          IsClosable="False">
                 <StackPanel Orientation="Horizontal"

@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using FacialEmotionRecognitionHub.Bus.Services;
+using FacialEmotionRecognitionHub.Bus.ViewModels;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
@@ -16,6 +19,7 @@ using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 
+
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
 
@@ -26,17 +30,31 @@ namespace FacialEmotionRecognitionHub
     /// </summary>
     public partial class App : Application
     {
-        private Window? _window;
+        public IServiceProvider Services { get; }
+        private static IServiceProvider ConfigureServices()
+        {
+            var services = new ServiceCollection();
+            // Services
+            services.AddSingleton<AIModelsManager>(x =>
+                ActivatorUtilities.CreateInstance<AIModelsManager>(x, Windows.Storage.ApplicationData.Current.LocalFolder)
+            );
+            // ViewModels
+            services.AddTransient<TabViewVM>();
+            return services.BuildServiceProvider();
+        }
 
+        private Window? _window;
+       
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
         /// executed, and as such is the logical equivalent of main() or WinMain().
         /// </summary>
         public App()
         {
+            Services = ConfigureServices();
             InitializeComponent();
         }
-
+        
         /// <summary>
         /// Invoked when the application is launched.
         /// </summary>
@@ -46,5 +64,7 @@ namespace FacialEmotionRecognitionHub
             _window = new MainWindow();
             _window.Activate();
         }
+
+        public new static App Current => (App)Application.Current;
     }
 }
