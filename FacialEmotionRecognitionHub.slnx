@@ -4,6 +4,7 @@
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
+  <Project Path="FacialEmotionRecognitionHub.Bus/FacialEmotionRecognitionHub.Bus.csproj" />
   <Project Path="FacialEmotionRecognitionHub/FacialEmotionRecognitionHub.csproj">
     <Platform Solution="*|ARM64" Project="ARM64" />
     <Platform Solution="*|x64" Project="x64" />
