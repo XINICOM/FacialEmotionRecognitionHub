@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "FacialEmotionRecognitionHub (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "FacialEmotionRecognitionHub (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}
