@@ -19,7 +19,8 @@
         </Grid.RowDefinitions>
         <TitleBar x:Name="AppTitleBar"
                   Title="Facial Emotion Recognition Hub"
-                  IsBackButtonVisible="False">
+                  IsBackButtonVisible="True"
+                  IsBackButtonEnabled="False">
             <!--<TitleBar.IconSource>
                 <FontIconSource Glyph="&#xF4AA;" />
             </TitleBar.IconSource>-->
@@ -28,19 +29,29 @@
         <!--<Frame x:Name="rootFrame" Grid.Row="1"/>-->
         <!--<Frame x:Name="rootFrame" Grid.Row="1" SourcePageType="views:NotePage"/>-->
         <!--<Frame x:Name="rootFrame"
-               Grid.Row="1" />-->
+               Grid.Row="1">
+            <Grid>
+                <Button Content="button" />
+                <TextBlock Text="aaa" />
+            </Grid>
+            
+        </Frame>-->
         <TabView x:Name="MainTabView"
-                 AllowDropTabs="True"
+                 CanDragTabs="True"
                  TabCloseRequested="MainTabView_TabCloseRequested"
-                 Grid.Row="1"><!--CanTearOutTabs="True"-->
+                 Grid.Row="1">
             <TabViewItem Header="首页"
-                         Content="欢迎使用我的应用！"
-                         CanDrag="False"
-                         IsClosable="False"/>
-            <TabViewItem Header="设置"
+                         IsClosable="False">
+                <StackPanel Orientation="Horizontal"
+                            Spacing="8">
+                    <TextBlock Text="没有运行中的模型" />
+                    <Button Content="创建新模型" />
+                </StackPanel>
+            </TabViewItem>
+            <!--<TabViewItem Header="设置"
                          Content="个性化配置选项" />
             <TabViewItem Header="关于"
-                         Content="版本信息和帮助" />
+                         Content="版本信息和帮助" />-->
         </TabView>
     </Grid>
 </Window>

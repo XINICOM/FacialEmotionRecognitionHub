@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -30,16 +31,16 @@ namespace FacialEmotionRecognitionHub
             SetTitleBar(AppTitleBar);
         }
 
+        /// <summary>
+        /// 关闭tab
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
         void MainTabView_TabCloseRequested(TabView sender, TabViewTabCloseRequestedEventArgs args)
         {
+            Debug.WriteLine("a");
             sender.TabItems.Remove(args.Tab);
         }
-        //private void AppTitleBar_BackRequested(TitleBar sender, object args)
-        //{
-        //    if (rootFrame.CanGoBack == true)
-        //    {
-        //        rootFrame.GoBack();
-        //    }
-        //}
+
     }
 }
