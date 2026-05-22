@@ -27,16 +27,16 @@ namespace FacialEmotionRecognitionHub
     /// </summary>
     public sealed partial class MainWindow : Window
     {
-        private TabViewVM? tabViewVM;
+        private TabViewVM? VM;
         public MainWindow()
         {
             InitializeComponent();
             //自定义 titlebar
             ExtendsContentIntoTitleBar = true;
             SetTitleBar(AppTitleBar);
-            tabViewVM = App.Current.Services.GetService<TabViewVM>();
-            if (tabViewVM is not null)
-                tabViewVM.LoadTabViewItems();
+            VM = App.Current.Services.GetService<TabViewVM>();
+            //if (tabViewVM is not null)
+            //    tabViewVM.LoadTabViewItems();
 
         }
 
@@ -48,15 +48,16 @@ namespace FacialEmotionRecognitionHub
         void MainTabView_TabCloseRequested(TabView sender, TabViewTabCloseRequestedEventArgs args)
         {
             Debug.WriteLine("a");
-            sender.TabItems.Remove(args.Tab);
+            //sender.TabItems.Remove(args.Tab);
         }
 
         private void MainTabView_AddTabButtonClick(TabView sender, object args)
         {
-            if (tabViewVM is not null)
+            if (VM is not null)
             {
-                tabViewVM.CreatNewAiModel();
-                tabViewVM.LoadTabViewItems();
+                //tabViewVM.CreatNewAiModel();
+                //tabViewVM.LoadTabViewItems();
+                VM.AddTabViewItems();
             }
             
         }

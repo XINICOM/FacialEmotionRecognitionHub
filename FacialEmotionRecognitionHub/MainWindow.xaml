@@ -41,15 +41,16 @@
                  TabCloseRequested="MainTabView_TabCloseRequested"
                  AddTabButtonClick="MainTabView_AddTabButtonClick"
                  Grid.Row="1"
-                 TabItemsSource="{x:Bind tabViewVM.TabViewItems}">
-            <TabViewItem Header="首页"
+                 TabItemsSource="{x:Bind VM.TabViewItems}"
+                 SelectedItem="{x:Bind VM.SelectedTabViewItem, Mode=TwoWay}">
+            <!--<TabViewItem Header="首页"
                          IsClosable="False">
                 <StackPanel Orientation="Horizontal"
                             Spacing="8">
                     <TextBlock Text="没有运行中的模型" />
                     <Button Content="创建新模型" />
                 </StackPanel>
-            </TabViewItem>
+            </TabViewItem>-->
             <!--<TabViewItem Header="设置"
                          Content="个性化配置选项" />
             <TabViewItem Header="关于"

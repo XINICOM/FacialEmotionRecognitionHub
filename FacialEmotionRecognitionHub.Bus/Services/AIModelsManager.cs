@@ -24,9 +24,6 @@ namespace FacialEmotionRecognitionHub.Bus.Services
         {
             this.storageFolder = storageFolder;
             _runningAIModels = [];
-            _runningAIModels.Add(new AIModelM("model1"));
-            _runningAIModels.Add(new AIModelM("model2"));
-            _runningAIModels.Add(new AIModelM("model3"));
         }
 
         //todo
