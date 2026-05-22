@@ -47,19 +47,17 @@ namespace FacialEmotionRecognitionHub
         /// <param name="args"></param>
         void MainTabView_TabCloseRequested(TabView sender, TabViewTabCloseRequestedEventArgs args)
         {
-            Debug.WriteLine("a");
+            //Debug.WriteLine("a");
             //sender.TabItems.Remove(args.Tab);
+            if (VM is not null)
+                VM.CloseTabViewItemCommand.Execute(args.Tab);
         }
 
         private void MainTabView_AddTabButtonClick(TabView sender, object args)
         {
             if (VM is not null)
-            {
-                //tabViewVM.CreatNewAiModel();
-                //tabViewVM.LoadTabViewItems();
-                VM.AddTabViewItems();
-            }
-            
+                VM.AddTabViewItemCommand.Execute(null);
+
         }
     }
 }

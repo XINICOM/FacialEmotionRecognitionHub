@@ -39,17 +39,17 @@ namespace FacialEmotionRecognitionHub.Bus.ViewModels
                 Header = "Home",
                 IconSource = new SymbolIconSource
                 {
-                    Symbol = Symbol.Home
+                    Symbol = Symbol.Home,
                 },
                 IsClosable = false,
-                Content = "this is home page" + DateTime.Now.ToString()
+                Content = "this is home page" + DateTime.Now.ToString(),
             };
             TabViewItems.Add(homeTab);
             SelectedTabViewItem = homeTab;
         }
 
         [RelayCommand]
-        public void AddTabViewItems()
+        private void AddTabViewItem()
         {
             //tabViewM.LoadTabViewItems();
             //TabViewItems.Clear();
@@ -62,13 +62,29 @@ namespace FacialEmotionRecognitionHub.Bus.ViewModels
                 Header = "Creating New AI Model",
                 IconSource = new SymbolIconSource
                 {
-                    Symbol = Symbol.Setting,
+                    Symbol = Symbol.Edit,
                 },
                 IsClosable = true,
                 Content = "this is AIM Creating page" + DateTime.Now.ToString(),
             };
             TabViewItems.Add(newTab);
             SelectedTabViewItem = newTab;
+        }
+
+        [RelayCommand]
+        private void CloseTabViewItem(TabViewItem tvi)
+        {
+            if (tvi is null || tvi.IsClosable == false)
+                return;
+            var index = TabViewItems.IndexOf(tvi);
+            TabViewItems.Remove(tvi);
+            //if(SelectedTabViewItem == tvi)
+            //{
+            //    if (TabViewItems.Count >0)
+            //    {
+            //        SelectedTabViewItem = index > 0 ? TabViewItems[index - 1] : TabViewItems[0];
+            //    }
+            //}
         }
 
         //public void CreatNewAiModel() => tabViewM.CreatNewAiModel();

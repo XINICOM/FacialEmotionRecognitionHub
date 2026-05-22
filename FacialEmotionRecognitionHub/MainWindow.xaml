@@ -42,7 +42,9 @@
                  AddTabButtonClick="MainTabView_AddTabButtonClick"
                  Grid.Row="1"
                  TabItemsSource="{x:Bind VM.TabViewItems}"
-                 SelectedItem="{x:Bind VM.SelectedTabViewItem, Mode=TwoWay}">
+                 SelectedItem="{x:Bind VM.SelectedTabViewItem, Mode=TwoWay}"
+                 TabWidthMode="SizeToContent"
+                 CloseButtonOverlayMode="OnPointerOver">
             <!--<TabViewItem Header="首页"
                          IsClosable="False">
                 <StackPanel Orientation="Horizontal"
