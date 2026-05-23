@@ -36,7 +36,7 @@ namespace FacialEmotionRecognitionHub
         {
             var services = new ServiceCollection();
             // Services
-            services.AddSingleton<AIModelsManager>(x => ActivatorUtilities.CreateInstance<AIModelsManager>(x, Windows.Storage.ApplicationData.Current.LocalFolder)
+            services.AddSingleton<AIModelsManager>(x => ActivatorUtilities.CreateInstance<AIModelsManager>(x, Windows.Storage.ApplicationData.Current.LocalFolder, new JsonInterpreterService())
             );
             // ViewModels
             services.AddTransient<TabViewVM>(x => ActivatorUtilities.CreateInstance<TabViewVM>(x, new HomePage()));

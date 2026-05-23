@@ -89,6 +89,12 @@ namespace FacialEmotionRecognitionHub.Bus.ViewModels
             //}
         }
 
+        //todo
+        public void a()
+        {
+            aIModelsManager.CreatNewAIModelInstruction();
+        }
+
         //public void CreatNewAiModel() => tabViewM.CreatNewAiModel();
     }
 }

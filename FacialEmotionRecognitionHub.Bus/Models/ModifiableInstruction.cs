@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,12 +28,17 @@ namespace FacialEmotionRecognitionHub.Bus.Models
         }
         private Dictionary<string, object>? _templateReturn;
 
-        private bool _executable = false;
+        private bool _executable = true;
         private Command command = command;
         public async Task<Dictionary<string, object>?> Execute(object invoker, Dictionary<string, object>? parameters = null)
         {
+            Debug.WriteLine("try to excute");
             if (!_executable || command is null)
+            {
+                Debug.WriteLine("0");
                 return null;
+
+            }
             if(parameters is null)
             {
                 if(TemplateParameters is null)

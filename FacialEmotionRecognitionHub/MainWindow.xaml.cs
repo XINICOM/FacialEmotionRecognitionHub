@@ -56,8 +56,14 @@ namespace FacialEmotionRecognitionHub
 
         private void MainTabView_AddTabButtonClick(TabView sender, object args)
         {
+            //if (VM is not null)
+            //    VM.AddTabViewItemCommand.Execute(new ALModelCreatingPage());
             if (VM is not null)
+            {
                 VM.AddTabViewItemCommand.Execute(new ALModelCreatingPage());
+                //todo
+                VM.a();
+            }
 
         }
     }
