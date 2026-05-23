@@ -30,6 +30,8 @@ namespace FacialEmotionRecognitionHub.Bus.Models
 
         private bool _executable = true;
         private Command command = command;
+
+        //todo 验证返回是否满足模板样式
         public async Task<Dictionary<string, object>?> Execute(object invoker, Dictionary<string, object>? parameters = null)
         {
             Debug.WriteLine("try to excute");
