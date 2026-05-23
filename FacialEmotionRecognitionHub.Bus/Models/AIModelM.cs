@@ -10,6 +10,14 @@ namespace FacialEmotionRecognitionHub.Bus.Models
 {
     public class AIModelM
     {
+        private int _runningPort = 5000;
+        public int RunningPort
+        {
+            get
+            {
+                return _runningPort;
+            }
+        }
         public string Name;
         private AIModelConnectionService _aIModelConnectionService;
         private List<ModifiableInstruction> _modificationset;
@@ -17,7 +25,36 @@ namespace FacialEmotionRecognitionHub.Bus.Models
         public AIModelM(AIModelConnectionService aIModelConnectionService, string instructionSet)
         {
             //Name = name;
+            _modificationset = new();
             _aIModelConnectionService = aIModelConnectionService;
+        }
+
+        public void AddNewInstruction(ModifiableInstruction newInstruction)
+        {
+            if (_modificationset is null)
+                _modificationset = new();
+
+            if (_modificationset.Any(x => x.InstructionName == newInstruction.InstructionName))
+            {
+                //_modificationset.First(x=>x.InstructionName == newInstruction.InstructionName) = newInstruction;
+                _modificationset[_modificationset.FindIndex(x => x.InstructionName == newInstruction.InstructionName)] = newInstruction;
+            }
+            else
+            {
+                _modificationset.Add(newInstruction);
+            }
+        }
+
+        public ModifiableInstruction GetInstruction(string instructionName)
+        {
+            if (_modificationset.Any(x => x.InstructionName == instructionName))
+            {
+                return _modificationset.First(x => x.InstructionName == instructionName);
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 }
