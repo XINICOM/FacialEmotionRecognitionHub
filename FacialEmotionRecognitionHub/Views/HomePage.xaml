@@ -8,7 +8,137 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid>
+    <Grid Margin="4,4,4,4">
+        <ScrollViewer Grid.Column="0"
+                      Padding="16"
+                      HorizontalScrollBarVisibility="Auto"
+                      VerticalScrollBarVisibility="Disabled">
+            <StackPanel Orientation="Horizontal"
+                        Spacing="16">
+                <Border Width="300"
+                        Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                        BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                        BorderThickness="1"
+                        CornerRadius="8"
+                        Padding="16">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0"
+                                   Text="ALModel_Name"
+                                   Style="{StaticResource SubtitleTextBlockStyle}"
+                                   HorizontalAlignment="Center" />
+                        <TextBlock Grid.Row="1"
+                                   Text="train_ing..."
+                                   Style="{StaticResource CaptionTextBlockStyle}"
+                                   Foreground="Green"
+                                   HorizontalAlignment="Center"
+                                   Margin="0,2,0,12" />
+                        <MenuFlyoutSeparator Grid.Row="2" />
+                        <StackPanel Grid.Row="3"
+                                    Margin="0,12,0,0"
+                                    Spacing="16">
+                            <StackPanel>
+                                <TextBlock Text="Validation Accuracy"
+                                           Style="{StaticResource CaptionTextBlockStyle}"
+                                           Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" />
+                                <TextBlock Text="74.2%"
+                                           Style="{StaticResource DisplayTextBlockStyle}"
+                                           Foreground="{ThemeResource SystemControlHighlightAccentBrush}" />
+                            </StackPanel>
+                            <StackPanel>
+                                <TextBlock Text="Inference Latency (Per Frame)"
+                                           Style="{StaticResource CaptionTextBlockStyle}"
+                                           Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" />
+                                <TextBlock Text="12 ms"
+                                           Style="{StaticResource TitleTextBlockStyle}" />
+                            </StackPanel>
+                            <StackPanel>
+                                <TextBlock Text="Total Training Epochs"
+                                           Style="{StaticResource CaptionTextBlockStyle}"
+                                           Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" />
+                                <TextBlock Text="30 / 30"
+                                           Style="{StaticResource BodyTextBlockStyle}" />
+                            </StackPanel>
+                        </StackPanel>
+                    </Grid>
+                </Border>
 
+                <!-- MODEL COMPETITOR CARD 2 -->
+                <Border Width="300"
+                        Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                        BorderBrush="{ThemeResource SystemControlHighlightAccentBrush}"
+                        BorderThickness="2"
+                        CornerRadius="8"
+                        Padding="16">
+                    <!-- Highlighted border implies this model performs best -->
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <StackPanel Grid.Row="0"
+                                    Orientation="Horizontal"
+                                    HorizontalAlignment="Center"
+                                    Spacing="6">
+                            <TextBlock Text="ResNet50_FER"
+                                       Style="{StaticResource SubtitleTextBlockStyle}" />
+                            <Border Background="{ThemeResource SystemControlHighlightAccentBrush}"
+                                    CornerRadius="4"
+                                    Padding="6,2,6,2"
+                                    VerticalAlignment="Center">
+                                <TextBlock Text="BEST"
+                                           FontSize="10"
+                                           Foreground="White"
+                                           FontWeight="Bold" />
+                            </Border>
+                        </StackPanel>
+                        <TextBlock Grid.Row="1"
+                                   Text="Status: Trained"
+                                   Style="{StaticResource CaptionTextBlockStyle}"
+                                   Foreground="Green"
+                                   HorizontalAlignment="Center"
+                                   Margin="0,2,0,12" />
+                        <MenuFlyoutSeparator Grid.Row="2" />
+
+                        <!-- Benchmark Metrics Grid -->
+                        <StackPanel Grid.Row="3"
+                                    Margin="0,12,0,0"
+                                    Spacing="16">
+                            <StackPanel>
+                                <TextBlock Text="Validation Accuracy"
+                                           Style="{StaticResource CaptionTextBlockStyle}"
+                                           Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" />
+                                <TextBlock Text="87.5%"
+                                           Style="{StaticResource DisplayTextBlockStyle}"
+                                           Foreground="Green" />
+                            </StackPanel>
+                            <StackPanel>
+                                <TextBlock Text="Inference Latency (Per Frame)"
+                                           Style="{StaticResource CaptionTextBlockStyle}"
+                                           Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" />
+                                <TextBlock Text="45 ms"
+                                           Style="{StaticResource TitleTextBlockStyle}"
+                                           Foreground="{ThemeResource SystemFillColorAttentionBrush}" />
+                            </StackPanel>
+                            <StackPanel>
+                                <TextBlock Text="Total Training Epochs"
+                                           Style="{StaticResource CaptionTextBlockStyle}"
+                                           Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" />
+                                <TextBlock Text="50 / 50"
+                                           Style="{StaticResource BodyTextBlockStyle}" />
+                            </StackPanel>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+            </StackPanel>
+        </ScrollViewer>
     </Grid>
 </Page>

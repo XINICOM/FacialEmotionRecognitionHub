@@ -23,15 +23,15 @@ namespace FacialEmotionRecognitionHub.Bus.ViewModels
 
         private AIModelsManager aIModelsManager;
 
-        public TabViewVM(AIModelsManager aIModelsManager)
+        public TabViewVM(AIModelsManager aIModelsManager, object homePage)
         {
             //tabViewM = new TabViewM(aIModelsManager);
             this.aIModelsManager = aIModelsManager;
             _tabViewItems = [];
-            InitializeTabViewItems();
+            InitializeTabViewItems(homePage);
         }
 
-        private void InitializeTabViewItems()
+        private void InitializeTabViewItems(object homePage)
         {
             TabViewItems.Clear();
             var homeTab = new TabViewItem
@@ -42,14 +42,15 @@ namespace FacialEmotionRecognitionHub.Bus.ViewModels
                     Symbol = Symbol.Home,
                 },
                 IsClosable = false,
-                Content = "this is home page" + DateTime.Now.ToString(),
+                Content = homePage
+                //Content = "this is home page" + DateTime.Now.ToString(),
             };
             TabViewItems.Add(homeTab);
             SelectedTabViewItem = homeTab;
         }
 
         [RelayCommand]
-        private void AddTabViewItem()
+        private void AddTabViewItem(object page)
         {
             //tabViewM.LoadTabViewItems();
             //TabViewItems.Clear();
@@ -65,7 +66,8 @@ namespace FacialEmotionRecognitionHub.Bus.ViewModels
                     Symbol = Symbol.Edit,
                 },
                 IsClosable = true,
-                Content = "this is AIM Creating page" + DateTime.Now.ToString(),
+                Content = page,
+                //Content = "this is AIM Creating page" + DateTime.Now.ToString(),
             };
             TabViewItems.Add(newTab);
             SelectedTabViewItem = newTab;

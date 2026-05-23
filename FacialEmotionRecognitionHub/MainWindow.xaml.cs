@@ -16,6 +16,7 @@ using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using FacialEmotionRecognitionHub.Views;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -56,7 +57,7 @@ namespace FacialEmotionRecognitionHub
         private void MainTabView_AddTabButtonClick(TabView sender, object args)
         {
             if (VM is not null)
-                VM.AddTabViewItemCommand.Execute(null);
+                VM.AddTabViewItemCommand.Execute(new ALModelCreatingPage());
 
         }
     }

@@ -18,6 +18,7 @@ using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using FacialEmotionRecognitionHub.Views;
 
 
 // To learn more about WinUI, the WinUI project structure,
@@ -35,16 +36,15 @@ namespace FacialEmotionRecognitionHub
         {
             var services = new ServiceCollection();
             // Services
-            services.AddSingleton<AIModelsManager>(x =>
-                ActivatorUtilities.CreateInstance<AIModelsManager>(x, Windows.Storage.ApplicationData.Current.LocalFolder)
+            services.AddSingleton<AIModelsManager>(x => ActivatorUtilities.CreateInstance<AIModelsManager>(x, Windows.Storage.ApplicationData.Current.LocalFolder)
             );
             // ViewModels
-            services.AddTransient<TabViewVM>();
+            services.AddTransient<TabViewVM>(x => ActivatorUtilities.CreateInstance<TabViewVM>(x, new HomePage()));
             return services.BuildServiceProvider();
         }
 
         private Window? _window;
-       
+
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
         /// executed, and as such is the logical equivalent of main() or WinMain().
@@ -54,7 +54,7 @@ namespace FacialEmotionRecognitionHub
             Services = ConfigureServices();
             InitializeComponent();
         }
-        
+
         /// <summary>
         /// Invoked when the application is launched.
         /// </summary>

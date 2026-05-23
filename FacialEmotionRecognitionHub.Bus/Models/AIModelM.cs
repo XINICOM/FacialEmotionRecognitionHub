@@ -12,7 +12,7 @@ namespace FacialEmotionRecognitionHub.Bus.Models
     {
         public string Name;
         private AIModelConnectionService _aIModelConnectionService;
-        private dynamic _instructionSet = new ExpandoObject();
+        private List<ModifiableInstruction> _modificationset;
 
         public AIModelM(AIModelConnectionService aIModelConnectionService, string instructionSet)
         {

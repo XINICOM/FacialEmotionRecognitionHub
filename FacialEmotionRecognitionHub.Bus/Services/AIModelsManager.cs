@@ -30,7 +30,7 @@ namespace FacialEmotionRecognitionHub.Bus.Services
         public void CreatNewAIModel()
         {
             //todo
-            _runningAIModels.Add(new AIModelM("model4"));
+            //_runningAIModels.Add(new AIModelM("model4"));
         }
     }
 }
