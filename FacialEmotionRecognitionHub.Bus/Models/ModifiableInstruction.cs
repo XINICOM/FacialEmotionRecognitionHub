@@ -39,58 +39,70 @@ namespace FacialEmotionRecognitionHub.Bus.Models
         //        return predicate(InstructionBefore);
         //}
 
-
-        //todo 验证返回是否满足模板样式
         public async Task<Dictionary<string, object>?> Execute(object? invoker = null, Dictionary<string, object>? parameters = null)
         {
-            Debug.WriteLine("try to execute");
-            if (command is null)//!_executable || 
+            var result = ExecuteWithoutCheckingResult(invoker, parameters);
+            if (result.Result is not null && _templateReturn is not null)
             {
-                //Debug.WriteLine("0");
-                throw new InvalidOperationException(nameof(command) + " should not be null");
-                //return null;
+                if (result.Result.Keys.ToHashSet().SetEquals(_templateReturn.Keys))
+                    return result.Result;
+                else
+                    throw new InvalidOperationException($"new arguments beyond {_templateReturn.Keys.ToHashSet().ToString()} occured");
+            }
+            else if (_templateReturn is null)
+            {
+                if (result.Result is not null)
+                    throw new InvalidOperationException($"The return should be null");
+                else
+                    return null;
+            }
+            else
+                throw new InvalidOperationException("The return is missing required parameters");
+        }
 
+
+        public async Task<Dictionary<string, object>?> ExecuteWithoutCheckingResult(object? invoker = null, Dictionary<string, object>? parameters = null)
+        {
+            if (command is null)
+            {
+                throw new InvalidOperationException(nameof(command) + " should not be null");
             }
             object _invoker = invoker is null ? this : invoker;
+            Dictionary<string, object>? result;
             if (parameters is null)
             {
                 if (TemplateParameters is null)
                 {
                     //await command(invoker, null);
-                    return await command(_invoker, null);
+                    result = await command(_invoker, null);
                 }
                 else
                 {
                     //await command(invoker, TemplateParameters);
-                    return await command(_invoker, TemplateParameters);
+                    result = await command(_invoker, TemplateParameters);
                 }
             }
             else
             {
-                if (TemplateParameters is null)
+                ArgumentNullException.ThrowIfNull(TemplateParameters, $"Because the inner template parameters exists, the {nameof(parameters)} cannot be null");
+                if (parameters.Keys.ToHashSet().SetEquals(TemplateParameters.Keys))
                 {
-                    ArgumentNullException.ThrowIfNull(parameters, $"Because the inner template parameters exists, the {nameof(parameters)} cannot be null");
-                    return null;
+                    //await command(invoker, parameters);
+                    result = await command(_invoker, parameters);
                 }
                 else
                 {
-                    if (parameters.Keys.ToHashSet().SetEquals(TemplateParameters.Keys))
-                    {
-                        //await command(invoker, parameters);
-                        return await command(_invoker, parameters);
-                    }
+                    if (parameters.Keys.Except(TemplateParameters.Keys) is not null)
+                        throw new InvalidOperationException($"{nameof(parameters)} has new key which was not determinated in the template parameters");
                     else
                     {
-                        if (parameters.Keys.Except(TemplateParameters.Keys) is not null)
-                            throw new InvalidOperationException($"{nameof(parameters)} has new key which was not determinated in the template parameters");
-                        else
-                        {
-                            var fullParameters = TemplateParameters.Concat(parameters).GroupBy(x => x.Key).ToDictionary(x => x.Key, x => x.Last().Value);
-                            return await command(_invoker, fullParameters);
-                        }
+                        var fullParameters = TemplateParameters.Concat(parameters).GroupBy(x => x.Key).ToDictionary(x => x.Key, x => x.Last().Value);
+                        result = await command(_invoker, fullParameters);
                     }
                 }
+                
             }
+            return result;
         }
 
         public void AddParameter(string parameterName, object templateValue)

@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
-using Windows.Web.UI;
 using FacialEmotionRecognitionHub.Bus.Models;
-using Windows.Storage;
-using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
-using System.IO;
-using System.Diagnostics;
+using Newtonsoft.Json.Linq;
+using Windows.Storage;
+using Windows.Web.UI;
 
 namespace FacialEmotionRecognitionHub.Bus.Services
 {
@@ -76,9 +77,18 @@ namespace FacialEmotionRecognitionHub.Bus.Services
                 Debug.WriteLine($"PARAMETERS:");
                 foreach (var parameter in parameters)
                 {
-                    Debug.WriteLine($"{parameter.Key} = {parameter.Value}（TYPE: {parameter.Value.GetType()}）");
+                    Debug.WriteLine($"{parameter.Key} = {parameter.Value}(TYPE: {parameter.Value.GetType()})");
                 }
-                return null;
+                var result =
+                @"{
+                    ""successful"": ""error"",
+                }";
+                var r = _interpreter.InterpretArgument(JObject.Parse(result));
+                foreach(var rx in r)
+                {
+                    Debug.WriteLine($"{rx.Key} = {rx.Value} (TYPE: {rx.Value.GetType()})");
+                }
+                return r;
             });
             //Dictionary<string,object> newDict = new();
             //newDict["model_type"] = "newModelType";
