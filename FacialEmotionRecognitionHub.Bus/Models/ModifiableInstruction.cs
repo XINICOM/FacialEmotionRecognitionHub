@@ -28,36 +28,48 @@ namespace FacialEmotionRecognitionHub.Bus.Models
         }
         private Dictionary<string, object>? _templateReturn;
 
-        private bool _executable = true;
+        //private bool _executable;
         private Command command = command;
 
+        //public bool ExecutabilityUpdate(Func<ModifiableInstruction, bool>? predicate = null)
+        //{
+        //    if (InstructionBefore is null)
+        //        return true;
+        //    else
+        //        return predicate(InstructionBefore);
+        //}
+
+
         //todo 验证返回是否满足模板样式
-        public async Task<Dictionary<string, object>?> Execute(object invoker, Dictionary<string, object>? parameters = null)
+        public async Task<Dictionary<string, object>?> Execute(object? invoker = null, Dictionary<string, object>? parameters = null)
         {
-            Debug.WriteLine("try to excute");
-            if (!_executable || command is null)
+            Debug.WriteLine("try to execute");
+            if (command is null)//!_executable || 
             {
-                Debug.WriteLine("0");
-                return null;
+                //Debug.WriteLine("0");
+                throw new InvalidOperationException(nameof(command) + " should not be null");
+                //return null;
 
             }
-            if(parameters is null)
+            object _invoker = invoker is null ? this : invoker;
+            if (parameters is null)
             {
-                if(TemplateParameters is null)
+                if (TemplateParameters is null)
                 {
                     //await command(invoker, null);
-                    return await command(invoker, null);
+                    return await command(_invoker, null);
                 }
                 else
                 {
                     //await command(invoker, TemplateParameters);
-                    return await command(invoker, TemplateParameters);
+                    return await command(_invoker, TemplateParameters);
                 }
             }
             else
             {
-                if(TemplateParameters is null)
+                if (TemplateParameters is null)
                 {
+                    ArgumentNullException.ThrowIfNull(parameters, $"Because the inner template parameters exists, the {nameof(parameters)} cannot be null");
                     return null;
                 }
                 else
@@ -65,11 +77,17 @@ namespace FacialEmotionRecognitionHub.Bus.Models
                     if (parameters.Keys.ToHashSet().SetEquals(TemplateParameters.Keys))
                     {
                         //await command(invoker, parameters);
-                        return await command(invoker, parameters);
+                        return await command(_invoker, parameters);
                     }
                     else
                     {
-                        return null;
+                        if (parameters.Keys.Except(TemplateParameters.Keys) is not null)
+                            throw new InvalidOperationException($"{nameof(parameters)} has new key which was not determinated in the template parameters");
+                        else
+                        {
+                            var fullParameters = TemplateParameters.Concat(parameters).GroupBy(x => x.Key).ToDictionary(x => x.Key, x => x.Last().Value);
+                            return await command(_invoker, fullParameters);
+                        }
                     }
                 }
             }
@@ -79,7 +97,7 @@ namespace FacialEmotionRecognitionHub.Bus.Models
         {
             if (_templateParameters is null)
                 _templateParameters = new();
-            if(_templateParameters.Any(x=>x.Key != parameterName))
+            if (_templateParameters.Any(x => x.Key != parameterName))
             {
                 _templateParameters.Add(parameterName, templateValue);
             }

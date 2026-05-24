@@ -80,6 +80,11 @@ namespace FacialEmotionRecognitionHub.Bus.Services
                 }
                 return null;
             });
+            //Dictionary<string,object> newDict = new();
+            //newDict["model_type"] = "newModelType";
+            await instruction.Execute();
+            //await instruction.Execute(newDict);
+
             //JObject json = JObject.Parse(jsonSource);
 
             //string iName = json["name"]?.ToString();
@@ -161,7 +166,6 @@ namespace FacialEmotionRecognitionHub.Bus.Services
             //        }
             //    }
             //}
-            await instruction.Execute(instruction.InstructionName);
         }
 
         //public static bool IsValidFilePathFormat(string path)
