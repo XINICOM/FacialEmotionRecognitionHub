@@ -9,6 +9,7 @@ namespace FacialEmotionRecognitionHub.Bus.Services
 {
     public interface IInterpreter
     {
-        public ModifiableInstruction InstructionGenerator(string source, Command command);
+        public ModifiableInstruction InstructionGenerator(object source, Command command);
+        public Dictionary<string, object> InterpretArgument(object source);
     }
 }
