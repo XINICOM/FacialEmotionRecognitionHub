@@ -8,7 +8,11 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using FacialEmotionRecognitionHub.Bus.Models;
 using FacialEmotionRecognitionHub.Bus.Services;
+using Microsoft.UI;
+using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Media;
+using Windows.UI;
 
 namespace FacialEmotionRecognitionHub.Bus.ViewModels
 {
@@ -45,6 +49,18 @@ namespace FacialEmotionRecognitionHub.Bus.ViewModels
                 Content = homePage
                 //Content = "this is home page" + DateTime.Now.ToString(),
             };
+            homeTab.Resources = new()
+            {
+                { "TabViewItemHeaderBackground", new SolidColorBrush(Colors.Transparent) },
+                { "TabViewItemHeaderBackgroundSelected", new SolidColorBrush(Colors.Transparent) },
+                { "TabViewItemHeaderBackgroundPointerOver", new SolidColorBrush(Color.FromArgb(51, 255, 255, 255)) },
+                //{ "TabViewItemHeaderBackgroundPressed", new SolidColorBrush(Color.FromArgb(77, 255, 255, 255)) },
+                ////{ "TabViewItemHeaderBorderBrushSelected", new SolidColorBrush(Colors.Blue) },//(Brush)Application.Current.Resources["SystemControlForegroundAccentBrush"]
+                ////{ "TabViewItemHeaderBorderThicknessSelected", new Thickness(0,0,0,5) }
+                //{ "TabViewSelectionIndicatorBrush", new SolidColorBrush(Colors.Blue) },//(Brush)Application.Current.Resources["SystemControlForegroundAccentBrush"]
+                //{ "TabViewSelectionIndicatorThickness", new Thickness(0,0,0,5) }
+
+            };
             TabViewItems.Add(homeTab);
             SelectedTabViewItem = homeTab;
         }
@@ -69,6 +85,12 @@ namespace FacialEmotionRecognitionHub.Bus.ViewModels
                 Content = page,
                 //Content = "this is AIM Creating page" + DateTime.Now.ToString(),
             };
+            newTab.Resources = new()
+            {
+                { "TabViewItemHeaderBackground", new SolidColorBrush(Colors.Transparent) },
+                { "TabViewItemHeaderBackgroundSelected", new SolidColorBrush(Colors.Transparent) },
+                { "TabViewItemHeaderBackgroundPointerOver", new SolidColorBrush(Color.FromArgb(51, 255, 255, 255)) },
+            };
             TabViewItems.Add(newTab);
             SelectedTabViewItem = newTab;
         }
@@ -89,10 +111,10 @@ namespace FacialEmotionRecognitionHub.Bus.ViewModels
             //}
         }
 
-        //todo
-        public void a()
+        [RelayCommand]
+        public void Navigation(TabViewItem tvi)
         {
-            aIModelsManager.CreatNewAIModelInstruction();
+
         }
 
         //public void CreatNewAiModel() => tabViewM.CreatNewAiModel();

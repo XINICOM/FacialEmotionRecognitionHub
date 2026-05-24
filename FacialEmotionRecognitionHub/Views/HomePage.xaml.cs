@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using FacialEmotionRecognitionHub.Bus.ViewModels;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
@@ -23,9 +25,11 @@ namespace FacialEmotionRecognitionHub.Views
     /// </summary>
     public sealed partial class HomePage : Page
     {
+        private HomePageVM? VM;
         public HomePage()
         {
             InitializeComponent();
+            VM = App.Current.Services.GetService<HomePageVM>();
         }
     }
 }

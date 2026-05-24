@@ -8,7 +8,7 @@ using System.Dynamic;
 
 namespace FacialEmotionRecognitionHub.Bus.Models
 {
-    public class AIModelM
+    public class AIModelM(string name)
     {
         private int _runningPort = 5000;
         public int RunningPort
@@ -18,16 +18,16 @@ namespace FacialEmotionRecognitionHub.Bus.Models
                 return _runningPort;
             }
         }
-        public string Name;
+        public string Name = name;
         private AIModelConnectionService _aIModelConnectionService;
-        private List<ModifiableInstruction> _modificationset;
+        private List<ModifiableInstruction> _modificationset = [];
 
-        public AIModelM(AIModelConnectionService aIModelConnectionService, string instructionSet)
-        {
-            //Name = name;
-            _modificationset = new();
-            _aIModelConnectionService = aIModelConnectionService;
-        }
+        //public AIModelM(AIModelConnectionService aIModelConnectionService, string instructionSet)
+        //{
+        //    //Name = name;
+        //    _modificationset = [];
+        //    _aIModelConnectionService = aIModelConnectionService;
+        //}
 
         public void AddNewInstruction(ModifiableInstruction newInstruction)
         {

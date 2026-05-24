@@ -40,6 +40,7 @@ namespace FacialEmotionRecognitionHub
             );
             // ViewModels
             services.AddTransient<TabViewVM>(x => ActivatorUtilities.CreateInstance<TabViewVM>(x, new HomePage()));
+            services.AddTransient<HomePageVM>();
             return services.BuildServiceProvider();
         }
 

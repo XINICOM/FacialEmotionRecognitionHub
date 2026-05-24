@@ -8,9 +8,10 @@
         mc:Ignorable="d"
         Title="FacialEmotionRecognitionHub">
 
-    <!--<Window.SystemBackdrop>
-        <MicaBackdrop />
-    </Window.SystemBackdrop>-->
+    <Window.SystemBackdrop>
+        <MicaBackdrop Kind="BaseAlt"/>
+        <!--<DesktopAcrylicBackdrop />-->
+    </Window.SystemBackdrop>
 
     <Grid>
         <Grid.RowDefinitions>
@@ -19,7 +20,7 @@
         </Grid.RowDefinitions>
         <TitleBar x:Name="AppTitleBar"
                   Title="Facial Emotion Recognition Hub"
-                  IsBackButtonVisible="True"
+                  IsBackButtonVisible="False"
                   IsBackButtonEnabled="False">
             <!--<TitleBar.IconSource>
                 <FontIconSource Glyph="&#xF4AA;" />
@@ -40,11 +41,11 @@
                  CanDragTabs="True"
                  TabCloseRequested="MainTabView_TabCloseRequested"
                  AddTabButtonClick="MainTabView_AddTabButtonClick"
+                 SelectionChanged="MainTabView_SelectionChanged"
                  Grid.Row="1"
                  TabItemsSource="{x:Bind VM.TabViewItems}"
                  SelectedItem="{x:Bind VM.SelectedTabViewItem, Mode=TwoWay}"
-                 TabWidthMode="SizeToContent"
-                 CloseButtonOverlayMode="OnPointerOver">
+                 TabWidthMode="Equal">
             <!--<TabViewItem Header="首页"
                          IsClosable="False">
                 <StackPanel Orientation="Horizontal"
