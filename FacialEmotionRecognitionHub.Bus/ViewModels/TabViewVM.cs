@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
+using FacialEmotionRecognitionHub.Bus.Messages;
 using FacialEmotionRecognitionHub.Bus.Models;
 using FacialEmotionRecognitionHub.Bus.Services;
 using Microsoft.UI;
@@ -46,7 +49,8 @@ namespace FacialEmotionRecognitionHub.Bus.ViewModels
                     Symbol = Symbol.Home,
                 },
                 IsClosable = false,
-                Content = homePage
+                Content = homePage,
+                Tag = DateTime.Now,
                 //Content = "this is home page" + DateTime.Now.ToString(),
             };
             homeTab.Resources = new()
@@ -83,6 +87,7 @@ namespace FacialEmotionRecognitionHub.Bus.ViewModels
                 },
                 IsClosable = true,
                 Content = page,
+                Tag = DateTime.Now,
                 //Content = "this is AIM Creating page" + DateTime.Now.ToString(),
             };
             newTab.Resources = new()
@@ -115,6 +120,11 @@ namespace FacialEmotionRecognitionHub.Bus.ViewModels
         public void Navigation(TabViewItem tvi)
         {
 
+            if (TabViewItems.Any(x => x.Tag == tvi.Tag))
+            {
+                Debug.WriteLine("aaa");
+                WeakReferenceMessenger.Default.Send(new SelectedTabChangedMessage(tvi));
+            }
         }
 
         //public void CreatNewAiModel() => tabViewM.CreatNewAiModel();

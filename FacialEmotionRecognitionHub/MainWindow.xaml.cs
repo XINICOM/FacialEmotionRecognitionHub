@@ -68,9 +68,15 @@ namespace FacialEmotionRecognitionHub
 
         private void MainTabView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+
             var newSelectedTab = e.AddedItems.FirstOrDefault() as TabViewItem;
+
             if (VM is not null)
-                VM.Navigation();
+            {
+
+                //Debug.WriteLine("a");
+                VM.Navigation(newSelectedTab);
+            }
         }
     }
 }

@@ -101,8 +101,6 @@ namespace FacialEmotionRecognitionHub.Bus.Services
             ////newDict["model_type"] = "newModelType";
             //await instruction.Execute();
             ////await instruction.Execute(newDict);
-
-            
         }
 
     }
