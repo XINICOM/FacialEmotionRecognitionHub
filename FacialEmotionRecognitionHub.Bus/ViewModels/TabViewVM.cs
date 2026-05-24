@@ -69,6 +69,7 @@ namespace FacialEmotionRecognitionHub.Bus.ViewModels
             SelectedTabViewItem = homeTab;
         }
 
+        //todo
         [RelayCommand]
         private void AddTabViewItem(object page)
         {
@@ -114,6 +115,12 @@ namespace FacialEmotionRecognitionHub.Bus.ViewModels
             //        SelectedTabViewItem = index > 0 ? TabViewItems[index - 1] : TabViewItems[0];
             //    }
             //}
+        }
+
+        //todo
+        public void a()
+        {
+            aIModelsManager.CreatNewAIModelInstruction();
         }
 
         [RelayCommand]
