@@ -1,8 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using CommunityToolkit.Mvvm.Messaging;
+//using FacialEmotionRecognitionHub.Bus.Messages;
+using FacialEmotionRecognitionHub.Bus.Models;
 using FacialEmotionRecognitionHub.Bus.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
@@ -30,6 +34,13 @@ namespace FacialEmotionRecognitionHub.Views
         {
             InitializeComponent();
             VM = App.Current.Services.GetService<HomePageVM>();
+            DataContext = VM;
+            Loading += OnPageLoaded;
+        }
+        private void OnPageLoaded(object sender, object e)
+        {
+            //Debug.WriteLine("HOME PAGE LOAD");
+            VM?.UpdateAIModelMsCommand.Execute(null);
         }
     }
 }

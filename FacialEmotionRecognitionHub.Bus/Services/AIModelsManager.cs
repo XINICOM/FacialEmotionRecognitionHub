@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -17,7 +18,7 @@ namespace FacialEmotionRecognitionHub.Bus.Services
     public class AIModelsManager
     {
         private StorageFolder _storageFolder;
-        private List<AIModelM> _runningAIModels;
+        public List<AIModelM> _runningAIModels;
         private IInterpreter _interpreter;
         public List<AIModelM> RunningAIModels
         {
@@ -33,16 +34,16 @@ namespace FacialEmotionRecognitionHub.Bus.Services
             _runningAIModels = [];
 
             //todo
+            Debug.WriteLine("INIT");
             _runningAIModels.Add(new AIModelM("name1"));
             _runningAIModels.Add(new AIModelM("name2"));
             _runningAIModels.Add(new AIModelM("name3"));
-            _runningAIModels.Add(new AIModelM("name4"));
-            _runningAIModels.Add(new AIModelM("name5"));
         }
 
         //todo
         public void CreatNewAIModel()
         {
+            _runningAIModels.Add(new AIModelM(DateTime.Now.ToString()));
 
         }
 
@@ -120,10 +121,23 @@ namespace FacialEmotionRecognitionHub.Bus.Services
             //    }
             //    return r;
             //});
-            Dictionary<string,object> newDict = new();
-            newDict["model_type"] = "newModelType";
+            Dictionary<string,object> newDict = new()
+            {
+                //newDict["model_type"] = "newModelType";
+                { "epochs", 10 }
+            };
             //await instruction.Execute();
-            await instruction.Execute(this);
+            try
+            {
+
+                //await instruction.Execute();
+                await instruction.Execute(this, newDict);
+            }
+            catch(Exception ex)
+            {
+                Debug.WriteLine(ex);
+                throw;
+            }
         }
 
     }

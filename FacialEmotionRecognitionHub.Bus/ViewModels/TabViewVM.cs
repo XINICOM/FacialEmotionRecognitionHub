@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
-using FacialEmotionRecognitionHub.Bus.Messages;
+//using FacialEmotionRecognitionHub.Bus.Messages;
 using FacialEmotionRecognitionHub.Bus.Models;
 using FacialEmotionRecognitionHub.Bus.Services;
 using Microsoft.UI;
@@ -19,6 +19,12 @@ using Windows.UI;
 
 namespace FacialEmotionRecognitionHub.Bus.ViewModels
 {
+    public enum TabViewItemTag
+    {
+        HomePage,
+        ALModelPage,
+    }
+
     public partial class TabViewVM : ObservableObject
     {
         //private readonly TabViewM tabViewM;
@@ -34,13 +40,13 @@ namespace FacialEmotionRecognitionHub.Bus.ViewModels
         {
             //tabViewM = new TabViewM(aIModelsManager);
             this.aIModelsManager = aIModelsManager;
-            _tabViewItems = [];
+            _tabViewItems = new();
             InitializeTabViewItems(homePage);
         }
 
         private void InitializeTabViewItems(object homePage)
         {
-            TabViewItems.Clear();
+            //TabViewItems.Clear();
             var homeTab = new TabViewItem
             {
                 Header = "Home",
@@ -50,7 +56,7 @@ namespace FacialEmotionRecognitionHub.Bus.ViewModels
                 },
                 IsClosable = false,
                 Content = homePage,
-                Tag = DateTime.Now,
+                Tag = TabViewItemTag.HomePage,
                 //Content = "this is home page" + DateTime.Now.ToString(),
             };
             homeTab.Resources = new()
@@ -73,6 +79,8 @@ namespace FacialEmotionRecognitionHub.Bus.ViewModels
         [RelayCommand]
         private void AddTabViewItem(object page)
         {
+            //todo
+            aIModelsManager.CreatNewAIModel();
             //tabViewM.LoadTabViewItems();
             //TabViewItems.Clear();
             //foreach (var i in tabViewM.TabViewItems)
@@ -88,7 +96,7 @@ namespace FacialEmotionRecognitionHub.Bus.ViewModels
                 },
                 IsClosable = true,
                 Content = page,
-                Tag = DateTime.Now,
+                Tag = TabViewItemTag.ALModelPage,
                 //Content = "this is AIM Creating page" + DateTime.Now.ToString(),
             };
             newTab.Resources = new()
@@ -97,6 +105,7 @@ namespace FacialEmotionRecognitionHub.Bus.ViewModels
                 { "TabViewItemHeaderBackgroundSelected", new SolidColorBrush(Colors.Transparent) },
                 { "TabViewItemHeaderBackgroundPointerOver", new SolidColorBrush(Color.FromArgb(51, 255, 255, 255)) },
             };
+
             TabViewItems.Add(newTab);
             SelectedTabViewItem = newTab;
         }
@@ -106,33 +115,34 @@ namespace FacialEmotionRecognitionHub.Bus.ViewModels
         {
             if (tvi is null || tvi.IsClosable == false)
                 return;
-            var index = TabViewItems.IndexOf(tvi);
-            TabViewItems.Remove(tvi);
-            //if(SelectedTabViewItem == tvi)
+
+            //var index = TabViewItems.IndexOf(tvi);
+            //TabViewItems.Remove(tvi);
+            //if (SelectedTabViewItem == tvi)
             //{
-            //    if (TabViewItems.Count >0)
+            //    if (TabViewItems.Count > 0)
             //    {
             //        SelectedTabViewItem = index > 0 ? TabViewItems[index - 1] : TabViewItems[0];
             //    }
             //}
         }
 
-        //todo
-        public void a()
-        {
-            aIModelsManager.CreatNewAIModelInstruction();
-        }
+        
+        //public void a()
+        //{
+        //    aIModelsManager.CreatNewAIModelInstruction();
+        //}
 
-        [RelayCommand]
-        public void Navigation(TabViewItem tvi)
-        {
+        //[RelayCommand]
+        //public void Navigation(TabViewItem tvi)
+        //{
 
-            if (TabViewItems.Any(x => x.Tag == tvi.Tag))
-            {
-                Debug.WriteLine("aaa");
-                WeakReferenceMessenger.Default.Send(new SelectedTabChangedMessage(tvi));
-            }
-        }
+        //    if (TabViewItems.Any(x => x.Tag == tvi.Tag))
+        //    {
+        //        Debug.WriteLine("aaa");
+        //        WeakReferenceMessenger.Default.Send(new SelectedTabChangedMessage(tvi));
+        //    }
+        //}
 
         //public void CreatNewAiModel() => tabViewM.CreatNewAiModel();
     }

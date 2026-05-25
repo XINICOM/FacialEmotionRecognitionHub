@@ -41,11 +41,10 @@
                  CanDragTabs="True"
                  TabCloseRequested="MainTabView_TabCloseRequested"
                  AddTabButtonClick="MainTabView_AddTabButtonClick"
-                 SelectionChanged="MainTabView_SelectionChanged"
                  Grid.Row="1"
                  TabItemsSource="{x:Bind VM.TabViewItems}"
                  SelectedItem="{x:Bind VM.SelectedTabViewItem, Mode=TwoWay}"
-                 TabWidthMode="Equal">
+                 TabWidthMode="Equal"><!--SelectionChanged="MainTabView_SelectionChanged"-->
             <!--<TabViewItem Header="首页"
                          IsClosable="False">
                 <StackPanel Orientation="Horizontal"

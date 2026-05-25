@@ -28,7 +28,7 @@
                                     Orientation="Horizontal"
                                     HorizontalAlignment="Center"
                                     Spacing="6">
-                            <TextBlock Text="ResNet50_FER"
+                            <TextBlock Text="{x:Bind Name}"
                                        Style="{StaticResource SubtitleTextBlockStyle}" />
                             <Border Background="{ThemeResource SystemControlHighlightAccentBrush}"
                                     CornerRadius="4"

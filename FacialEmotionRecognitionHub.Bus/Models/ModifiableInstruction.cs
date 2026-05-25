@@ -38,17 +38,18 @@ namespace FacialEmotionRecognitionHub.Bus.Models
 
         public async Task<Dictionary<string, object>?> Execute(object? invoker = null, Dictionary<string, object>? parameters = null)
         {
-            var result = ExecuteWithoutCheckingResult(invoker, parameters);
-            if (result.Result is not null && _templateReturn is not null)
+            Debug.WriteLine("EXE2");
+            var result = await ExecuteWithoutCheckingResult(invoker, parameters);
+            if (result is not null && _templateReturn is not null)
             {
-                if (result.Result.Keys.ToHashSet().SetEquals(_templateReturn.Keys))
-                    return result.Result;
+                if (result.Keys.ToHashSet().SetEquals(_templateReturn.Keys))
+                    return result;
                 else
                     throw new InvalidOperationException($"new arguments beyond {_templateReturn.Keys.ToHashSet().ToString()} occured");
             }
             else if (_templateReturn is null)
             {
-                if (result.Result is not null)
+                if (result is not null)
                     throw new InvalidOperationException($"The return should be null");
                 else
                     return null;
@@ -89,7 +90,8 @@ namespace FacialEmotionRecognitionHub.Bus.Models
                 }
                 else
                 {
-                    if (parameters.Keys.Except(TemplateParameters.Keys) is not null)
+                    //Debug.WriteLine(parameters.Keys.Except(TemplateParameters.Keys).Count());
+                    if (parameters.Keys.Except(TemplateParameters.Keys).Any())
                         throw new InvalidOperationException($"{nameof(parameters)} has new key which was not determinated in the template parameters");
                     else
                     {
