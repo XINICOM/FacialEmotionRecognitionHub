@@ -30,28 +30,30 @@
                                     Spacing="6">
                             <TextBlock Text="{x:Bind Name}"
                                        Style="{StaticResource SubtitleTextBlockStyle}" />
-                            <Border Background="{ThemeResource SystemControlHighlightAccentBrush}"
+                            <!--<Border Background="{ThemeResource SystemControlHighlightAccentBrush}"
                                     CornerRadius="4"
                                     Padding="6,2,6,2"
                                     VerticalAlignment="Center">
                                 <TextBlock Text="BEST"
                                            FontSize="10"
                                            Foreground="White"
-                                           FontWeight="Bold" />
-                            </Border>
+                                           FontWeight="Bold"/>
+                            </Border>-->
                         </StackPanel>
                         <TextBlock Grid.Row="1"
-                                   Text="Status: Trained"
+                                   Text="{x:Bind Status}"
                                    Style="{StaticResource CaptionTextBlockStyle}"
-                                   Foreground="Green"
+                                   Foreground="Gray"
                                    HorizontalAlignment="Center"
                                    Margin="0,2,0,12" />
+                        
                         <ProgressBar Grid.Row="2"
                                      Value="100"
-                                     IsIndeterminate="True"
-                                     ShowError="False"
-                                     ShowPaused="False"
+                                     IsIndeterminate="{x:Bind IsIndeterminate}"
+                                     ShowError="{x:Bind ShowError}"
+                                     ShowPaused="{x:Bind ShowPaused}"
                                      Background="LightGray" />
+                        
                         <StackPanel Grid.Row="3"
                                     Margin="0,12,0,0"
                                     Spacing="16">
@@ -87,7 +89,9 @@
     
     <ItemsView Margin="4,4,4,4"
                ItemTemplate="{StaticResource DashboardItemTmplate}"
-               ItemsSource="{x:Bind VM.AIModelMs}">
+               ItemsSource="{x:Bind VM.AIModelMs}"
+               SelectionMode="None"
+               IsItemInvokedEnabled="True"><!--ItemInvoked="ItemsView_ItemInvoked"-->
         <ItemsView.Layout>
             <UniformGridLayout MinItemWidth="300"
                                MinColumnSpacing="16"

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using FacialEmotionRecognitionHub.Bus.ViewModels;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
@@ -23,9 +25,82 @@ namespace FacialEmotionRecognitionHub.Views
     /// </summary>
     public sealed partial class AIModelPage : Page
     {
+        private AIModelPageVM? VM;
+
         public AIModelPage()
         {
             InitializeComponent();
+            VM = App.Current.Services.GetService<AIModelPageVM>();
+        }
+
+        // ==========================================
+        // TAB 1: DATA LOADING EVENTS
+        // ==========================================
+        private void LoadDataButton_Click(object sender, RoutedEventArgs e)
+        {
+            // 💡 前端同学读取控件值示范：string path = LoadPathTextBox.Text;
+        }
+
+        // ==========================================
+        // TAB 2: PREPROCESSING EVENTS
+        // ==========================================
+        private void PreprocessButton_Click(object sender, RoutedEventArgs e)
+        {
+            // 💡 前端同学读取控件值示范：double bSize = BatchSizeNumberBox.Value;
+        }
+
+        // ==========================================
+        // TAB 3: TRAINING MANAGEMENT EVENTS
+        // ==========================================
+        private void StartTrainingButton_Click(object sender, RoutedEventArgs e)
+        {
+            TrainingStatusTxt.Text = "Status: Training...";
+            TrainingProgressBar.IsIndeterminate = true;
+            PauseTrainingBtn.IsEnabled = true; // 激活暂停按钮
+            TerminalBlock.Text += "\n[EXEC] python train.py --epochs 20 --lr 0.001";
+        }
+
+        /// <summary>
+        /// 💡 核心改动：Pause 按钮与 Resume 按钮的就地转换逻辑
+        /// </summary>
+        private void PauseTrainingButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (PauseTrainingBtn.Content.ToString() == "Pause")
+            {
+                // 切换为暂停状态
+                PauseTrainingBtn.Content = "Resume";
+                TrainingStatusTxt.Text = "Status: Paused";
+                TrainingProgressBar.IsIndeterminate = false; // 暂停进度流动
+                TerminalBlock.Text += "\n[SUSPEND] Training process paused by user.";
+            }
+            else
+            {
+                // 切换回恢复状态
+                PauseTrainingBtn.Content = "Pause";
+                TrainingStatusTxt.Text = "Status: Training...";
+                TrainingProgressBar.IsIndeterminate = true; // 恢复进度流动
+                TerminalBlock.Text += "\n[RESUME] Training process resumed.";
+            }
+        }
+
+        private void TerminateTrainingButton_Click(object sender, RoutedEventArgs e)
+        {
+            TrainingStatusTxt.Text = "Status: Terminated";
+            TrainingProgressBar.IsIndeterminate = false;
+            PauseTrainingBtn.Content = "Pause";
+            PauseTrainingBtn.IsEnabled = false; // 禁用暂停按钮
+            TerminalBlock.Text += "\n[CRITICAL] Process terminated explicitly.";
+        }
+
+        // ==========================================
+        // TAB 4: REAL-TIME INFERENCE EVENTS
+        // ==========================================
+        private void SelectImageButton_Click(object sender, RoutedEventArgs e)
+        {
+        }
+
+        private void PredictButton_Click(object sender, RoutedEventArgs e)
+        {
         }
     }
 }

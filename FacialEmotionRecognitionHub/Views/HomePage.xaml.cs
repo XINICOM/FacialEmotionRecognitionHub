@@ -42,5 +42,7 @@ namespace FacialEmotionRecognitionHub.Views
             //Debug.WriteLine("HOME PAGE LOAD");
             VM?.UpdateAIModelMsCommand.Execute(null);
         }
+
+        //private void ItemsView_ItemInvoked(ItemsView sender, ItemsViewItemInvokedEventArgs args) => VM?.a(sender, args);
     }
 }

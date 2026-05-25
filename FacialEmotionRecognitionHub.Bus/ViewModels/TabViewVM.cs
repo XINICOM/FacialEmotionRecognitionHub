@@ -35,13 +35,22 @@ namespace FacialEmotionRecognitionHub.Bus.ViewModels
         private TabViewItem _selectedTabViewItem;
 
         private AIModelsManager aIModelsManager;
+        private IOService iOService;
 
-        public TabViewVM(AIModelsManager aIModelsManager, object homePage)
+        public TabViewVM(AIModelsManager aIModelsManager,IOService iOService, object homePage)
         {
             //tabViewM = new TabViewM(aIModelsManager);
             this.aIModelsManager = aIModelsManager;
+            this.iOService = iOService;
             _tabViewItems = new();
             InitializeTabViewItems(homePage);
+
+            TabViewItems.CollectionChanged += TabViewItems_CollectionChanged;
+        }
+
+        private void TabViewItems_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            Debug.WriteLine("TabViewItems_CollectionChanged");
         }
 
         private void InitializeTabViewItems(object homePage)
@@ -76,9 +85,14 @@ namespace FacialEmotionRecognitionHub.Bus.ViewModels
         }
 
         //todo
-        [RelayCommand]
-        private void AddTabViewItem(object page)
+        public async Task AddTabViewItem(nint sender, object page)
         {
+            var path = await iOService.OpenFileClick(sender);
+            if (path is null)
+                return;
+            Debug.WriteLine(path);
+
+
             //todo
             aIModelsManager.CreatNewAIModel();
             //tabViewM.LoadTabViewItems();

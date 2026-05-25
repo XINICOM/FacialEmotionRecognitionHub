@@ -17,6 +17,7 @@ using Microsoft.UI.Xaml.Navigation;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using FacialEmotionRecognitionHub.Views;
+using System.Threading.Tasks;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -54,13 +55,13 @@ namespace FacialEmotionRecognitionHub
                 VM.CloseTabViewItemCommand.Execute(args.Tab);
         }
 
-        private void MainTabView_AddTabButtonClick(TabView sender, object args)
+        private async void MainTabView_AddTabButtonClickAsync(TabView sender, object args)
         {
             //if (VM is not null)
             //    VM.AddTabViewItemCommand.Execute(new ALModelCreatingPage());
             if (VM is not null)
             {
-                VM.AddTabViewItemCommand.Execute(new ALModelCreatingPage());
+                await VM.AddTabViewItem(WinRT.Interop.WindowNative.GetWindowHandle(this), new AIModelPage());
                 
                 //VM.a();
             }

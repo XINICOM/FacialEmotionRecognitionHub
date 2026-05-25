@@ -14,9 +14,15 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="Views\ALModelCreatingPage.xaml.cs" />
+  </ItemGroup>
+  <ItemGroup>
     <None Remove="Views\AIModelPage.xaml" />
     <None Remove="Views\ALModelCreatingPage.xaml" />
     <None Remove="Views\HomePage.xaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Remove="Views\ALModelCreatingPage.xaml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -50,11 +56,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FacialEmotionRecognitionHub.Bus\FacialEmotionRecognitionHub.Bus.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <Page Update="Views\ALModelCreatingPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="Views\AIModelPage.xaml">

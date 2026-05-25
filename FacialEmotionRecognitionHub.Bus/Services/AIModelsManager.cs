@@ -34,17 +34,20 @@ namespace FacialEmotionRecognitionHub.Bus.Services
             _runningAIModels = [];
 
             //todo
-            Debug.WriteLine("INIT");
-            _runningAIModels.Add(new AIModelM("name1"));
-            _runningAIModels.Add(new AIModelM("name2"));
-            _runningAIModels.Add(new AIModelM("name3"));
+            //_runningAIModels.Add(new AIModelM("C:\\Users\\XINIC\\AppData\\Local\\Packages\\fe185a02-4a03-45e3-8bb8-99f77cd78caf_6jqbvxqyaede0\\LocalState\\dependence\\SAMPLE.exe",5000));
         }
+
+        //public void Pause(AIModelM target)
+        //{
+        //    _runningAIModels[_runningAIModels.IndexOf(target)].SetModelStatus(ModelStatus.Pause);
+        //}
 
         //todo
         public void CreatNewAIModel()
         {
-            _runningAIModels.Add(new AIModelM(DateTime.Now.ToString()));
-
+            //todo
+            //_runningAIModels.Add(new AIModelM("C:\\Users\\XINIC\\AppData\\Local\\Packages\\fe185a02-4a03-45e3-8bb8-99f77cd78caf_6jqbvxqyaede0\\LocalState\\dependence\\SAMPLE.exe", 5000));
+            //_runningAIModels[0].Status = "CHANGED";
         }
 
         //todo

@@ -40,7 +40,7 @@
         <TabView x:Name="MainTabView"
                  CanDragTabs="True"
                  TabCloseRequested="MainTabView_TabCloseRequested"
-                 AddTabButtonClick="MainTabView_AddTabButtonClick"
+                 AddTabButtonClick="MainTabView_AddTabButtonClickAsync"
                  Grid.Row="1"
                  TabItemsSource="{x:Bind VM.TabViewItems}"
                  SelectedItem="{x:Bind VM.SelectedTabViewItem, Mode=TwoWay}"

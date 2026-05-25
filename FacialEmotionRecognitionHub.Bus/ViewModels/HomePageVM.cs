@@ -9,6 +9,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using FacialEmotionRecognitionHub.Bus.Models;
 using FacialEmotionRecognitionHub.Bus.Services;
+using Microsoft.UI.Xaml.Controls;
 
 namespace FacialEmotionRecognitionHub.Bus.ViewModels
 {
@@ -38,5 +39,12 @@ namespace FacialEmotionRecognitionHub.Bus.ViewModels
             Debug.WriteLine($"{AIModelMs.Count()}");
 
         }
+
+        //public void a(ItemsView sender, ItemsViewItemInvokedEventArgs args)
+        //{
+        //    Debug.WriteLine("INVOKE");
+        //    _aIModelsManager.Pause(args.InvokedItem as AIModelM);
+        //    updateAIModelMsCommand.Execute(null);
+        //}
     }
 }
