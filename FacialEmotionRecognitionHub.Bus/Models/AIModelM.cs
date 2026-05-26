@@ -31,7 +31,7 @@ namespace FacialEmotionRecognitionHub.Bus.Models
             Name = name;
             _id = id;
 
-            _modifiableInstructionSet = [];
+            ModifiableInstructionSet = [];
 
             httpClient = new HttpClient();
             httpClient.BaseAddress = new Uri($"http://127.0.0.1:{Port}");
@@ -139,7 +139,7 @@ namespace FacialEmotionRecognitionHub.Bus.Models
 
 
         private AIModelConnectionService _aIModelConnectionService;
-        private List<ModifiableInstruction> _modifiableInstructionSet;
+        public List<ModifiableInstruction> ModifiableInstructionSet;
 
         //public AIModelM(AIModelConnectionService aIModelConnectionService, string instructionSet)
         //{
@@ -185,26 +185,26 @@ namespace FacialEmotionRecognitionHub.Bus.Models
 
         public void AddNewInstruction(ModifiableInstruction newInstruction)
         {
-            if (_modifiableInstructionSet is null)
-                _modifiableInstructionSet = new();
+            if (ModifiableInstructionSet is null)
+                ModifiableInstructionSet = new();
 
-            if (_modifiableInstructionSet.Any(x => x.InstructionName == newInstruction.InstructionName))
+            if (ModifiableInstructionSet.Any(x => x.InstructionName == newInstruction.InstructionName))
             {
                 //_modificationset.First(x=>x.InstructionName == newInstruction.InstructionName) = newInstruction;
-                _modifiableInstructionSet[_modifiableInstructionSet.FindIndex(x => x.InstructionName == newInstruction.InstructionName)] = newInstruction;
+                ModifiableInstructionSet[ModifiableInstructionSet.FindIndex(x => x.InstructionName == newInstruction.InstructionName)] = newInstruction;
             }
             else
             {
-                _modifiableInstructionSet.Add(newInstruction);
+                ModifiableInstructionSet.Add(newInstruction);
             }
         }
 
         public ModifiableInstruction GetInstruction(string instructionName)
         {
-            if (_modifiableInstructionSet.Any(x => x.InstructionName == instructionName))
+            if (ModifiableInstructionSet.Any(x => x.InstructionName == instructionName))
             {
                 //return _modifiableInstructionSet.First(x => x.InstructionName == instructionName);
-                return _modifiableInstructionSet[_modifiableInstructionSet.FindIndex(x => x.InstructionName == instructionName)];
+                return ModifiableInstructionSet[ModifiableInstructionSet.FindIndex(x => x.InstructionName == instructionName)];
             }
             else
             {

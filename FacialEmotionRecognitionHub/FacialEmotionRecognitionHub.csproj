@@ -15,6 +15,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="Views\ALModelCreatingPage.xaml.cs" />
+    <Compile Remove="Views\ParamTemplate.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="Views\AIModelPage.xaml" />
@@ -83,5 +84,6 @@
     <PublishReadyToRun Condition="'$(Configuration)' != 'Debug'">True</PublishReadyToRun>
     <PublishTrimmed Condition="'$(Configuration)' == 'Debug'">False</PublishTrimmed>
     <PublishTrimmed Condition="'$(Configuration)' != 'Debug'">True</PublishTrimmed>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 </Project>
