@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
+using System.Net;
+using System.Net.Sockets;
 using System.Threading.Tasks;
 using Microsoft.UI;
 using Microsoft.UI.Xaml;
@@ -25,6 +28,45 @@ namespace FacialEmotionRecognitionHub.Bus.Services
                 Directory.CreateDirectory(DependencePath);
             if (!Directory.Exists(ModelsPath))
                 Directory.CreateDirectory(ModelsPath);
+        }
+
+        public string SearchAndInitializeConfigJson(string exePath)
+        {
+            string name = Path.GetFileNameWithoutExtension(exePath);
+            string configFolder = Path.Combine(ModelsPath, name);
+            InitializeConfigFolder(configFolder);
+            string primaryConfigJson = Path.Combine(configFolder, $"{name}.json");
+            if (!File.Exists(primaryConfigJson))
+            {
+                string exeFloder = Path.GetDirectoryName(exePath);
+                string secondaryConfigJson = Path.Combine(exeFloder, $"{name}.json");
+                Debug.WriteLine(secondaryConfigJson);
+                if (!File.Exists(secondaryConfigJson))
+                    throw new InvalidOperationException("Miss the critical config json file !");
+                File.Copy(secondaryConfigJson, primaryConfigJson, true);
+            }
+            return primaryConfigJson;
+        }
+
+        public void InitializeConfigFolder(string folderPath)
+        {
+            if(!Directory.Exists(folderPath))
+                Directory.CreateDirectory(folderPath);
+            string saveFloder = Path.Combine(folderPath, "save");
+            if(!Directory.Exists(saveFloder))
+                Directory.CreateDirectory(saveFloder);
+            string cacheFloder = Path.Combine(folderPath, "cache");
+            if(!Directory.Exists(cacheFloder))
+                Directory.CreateDirectory(cacheFloder);
+        }
+
+        public int GetAvailablePort(IPAddress ip)
+        {
+            using var listener = new TcpListener(ip, 0);
+            listener.Start();
+            int port = ((IPEndPoint)listener.LocalEndpoint).Port;
+            listener.Stop();
+            return port;
         }
 
         public async Task<string> OpenFileClick(nint sender)

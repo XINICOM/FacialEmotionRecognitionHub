@@ -61,7 +61,9 @@ namespace FacialEmotionRecognitionHub
             //    VM.AddTabViewItemCommand.Execute(new ALModelCreatingPage());
             if (VM is not null)
             {
-                await VM.AddTabViewItem(WinRT.Interop.WindowNative.GetWindowHandle(this), new AIModelPage());
+                var id = DateTime.Now;
+
+                await VM.AddTabViewItem(WinRT.Interop.WindowNative.GetWindowHandle(this), new AIModelPage(id), id);
                 
                 //VM.a();
             }

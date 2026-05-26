@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
+using FacialEmotionRecognitionHub.Bus.Messages;
+
 //using FacialEmotionRecognitionHub.Bus.Messages;
 using FacialEmotionRecognitionHub.Bus.Models;
 using FacialEmotionRecognitionHub.Bus.Services;
@@ -45,13 +47,13 @@ namespace FacialEmotionRecognitionHub.Bus.ViewModels
             _tabViewItems = new();
             InitializeTabViewItems(homePage);
 
-            TabViewItems.CollectionChanged += TabViewItems_CollectionChanged;
+            //TabViewItems.CollectionChanged += TabViewItems_CollectionChanged;
         }
 
-        private void TabViewItems_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            Debug.WriteLine("TabViewItems_CollectionChanged");
-        }
+        //private void TabViewItems_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        //{
+        //    Debug.WriteLine("TabViewItems_CollectionChanged");
+        //}
 
         private void InitializeTabViewItems(object homePage)
         {
@@ -85,16 +87,19 @@ namespace FacialEmotionRecognitionHub.Bus.ViewModels
         }
 
         //todo
-        public async Task AddTabViewItem(nint sender, object page)
+        public async Task AddTabViewItem(nint sender, object page, DateTime id)
         {
-            var path = await iOService.OpenFileClick(sender);
-            if (path is null)
+            var exeFile = await iOService.OpenFileClick(sender);
+            if (exeFile is null)
                 return;
-            Debug.WriteLine(path);
+            Debug.WriteLine(exeFile);
 
 
             //todo
-            aIModelsManager.CreatNewAIModel();
+            var newModel = aIModelsManager.CreatNewAIModel(exeFile, id);
+
+            WeakReferenceMessenger.Default.Send(new AIModelInitializedMessage(newModel));
+
             //tabViewM.LoadTabViewItems();
             //TabViewItems.Clear();
             //foreach (var i in tabViewM.TabViewItems)
@@ -103,14 +108,14 @@ namespace FacialEmotionRecognitionHub.Bus.ViewModels
             //}
             var newTab = new TabViewItem
             {
-                Header = "Creating New AI Model",
+                Header = newModel.Name,
                 IconSource = new SymbolIconSource
                 {
-                    Symbol = Symbol.Edit,
+                    Symbol = Symbol.Library,
                 },
                 IsClosable = true,
                 Content = page,
-                Tag = TabViewItemTag.ALModelPage,
+                Tag = newModel.ID,
                 //Content = "this is AIM Creating page" + DateTime.Now.ToString(),
             };
             newTab.Resources = new()

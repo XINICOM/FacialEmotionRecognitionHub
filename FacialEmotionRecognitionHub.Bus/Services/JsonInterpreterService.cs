@@ -42,6 +42,10 @@ namespace FacialEmotionRecognitionHub.Bus.Services
                     {
                         result.Add(key, false);
                     }
+                    else if (key == "successful")
+                    {
+                        result.Add(key, "0");
+                    }
                     else
                     {
                         result.Add(key, value);

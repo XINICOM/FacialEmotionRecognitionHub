@@ -65,8 +65,16 @@ namespace FacialEmotionRecognitionHub
         {
             _window = new MainWindow();
             _window.Activate();
+
+            AppDomain.CurrentDomain.ProcessExit += (s, e) => Services.GetService<AIModelsManager>()?.Dispose();
+
         }
 
         public new static App Current => (App)Application.Current;
+
+        //protected override void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs args)
+        //{
+        //    // 注册应用退出时释放
+        //}
     }
 }

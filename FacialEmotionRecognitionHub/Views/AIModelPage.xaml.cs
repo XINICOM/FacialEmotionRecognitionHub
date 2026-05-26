@@ -1,8 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using CommunityToolkit.Mvvm.Messaging;
+using FacialEmotionRecognitionHub.Bus.Messages;
+using FacialEmotionRecognitionHub.Bus.Models;
 using FacialEmotionRecognitionHub.Bus.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
@@ -25,13 +29,32 @@ namespace FacialEmotionRecognitionHub.Views
     /// </summary>
     public sealed partial class AIModelPage : Page
     {
+        private DateTime _id;
+
         private AIModelPageVM? VM;
 
-        public AIModelPage()
+        public AIModelPage(DateTime id)
         {
             InitializeComponent();
+            _id = id;
             VM = App.Current.Services.GetService<AIModelPageVM>();
+
+            WeakReferenceMessenger.Default.Register<AIModelInitializedMessage>(this, (o, m) =>
+            {
+                //Debug.WriteLine("TRY MODEL UPDATE");
+                //Debug.WriteLine($"{m.Value.GetType()}");
+
+                if(m.Value is AIModelM model)
+                {
+                    VM?.SetAIModelM(model);
+                }
+
+                WeakReferenceMessenger.Default.Unregister<AIModelInitializedMessage>(this);
+            });
         }
+
+        //public void InitializeWithAIModelM(AIModelM model) => VM?.SetAIModelM(model);
+
 
         // ==========================================
         // TAB 1: DATA LOADING EVENTS

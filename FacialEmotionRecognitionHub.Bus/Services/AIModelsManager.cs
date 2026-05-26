@@ -4,7 +4,11 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Net.Sockets;
 using System.Reflection.Metadata;
+using System.Reflection.PortableExecutable;
 using System.Text;
 using System.Threading.Tasks;
 using FacialEmotionRecognitionHub.Bus.Models;
@@ -15,25 +19,27 @@ using Windows.Web.UI;
 
 namespace FacialEmotionRecognitionHub.Bus.Services
 {
-    public class AIModelsManager
+    public class AIModelsManager : IDisposable
     {
         private StorageFolder _storageFolder;
-        public List<AIModelM> _runningAIModels;
+        public List<AIModelM> RunningAIModels;
         private IInterpreter _interpreter;
-        public List<AIModelM> RunningAIModels
+        private IOService _iOService;
+        //public List<AIModelM> RunningAIModels
+        //{
+        //    get
+        //    {
+        //        return _runningAIModels;
+        //    }
+        //}
+        public AIModelsManager(StorageFolder storageFolder, IInterpreter interpreter, IOService iOService)
         {
-            get
-            {
-                return _runningAIModels;
-            }
-        }
-        public AIModelsManager(StorageFolder storageFolder, IInterpreter interpreter)
-        {
-            this._storageFolder = storageFolder;
-            this._interpreter = interpreter;
-            _runningAIModels = [];
+            _storageFolder = storageFolder;
+            _interpreter = interpreter;
+            RunningAIModels = [];
+            _iOService = iOService;
 
-            //todo
+            
             //_runningAIModels.Add(new AIModelM("C:\\Users\\XINIC\\AppData\\Local\\Packages\\fe185a02-4a03-45e3-8bb8-99f77cd78caf_6jqbvxqyaede0\\LocalState\\dependence\\SAMPLE.exe",5000));
         }
 
@@ -43,12 +49,88 @@ namespace FacialEmotionRecognitionHub.Bus.Services
         //}
 
         //todo
-        public void CreatNewAIModel()
+        public AIModelM CreatNewAIModel(string dependenceEXEPath, DateTime id)
         {
-            //todo
-            //_runningAIModels.Add(new AIModelM("C:\\Users\\XINIC\\AppData\\Local\\Packages\\fe185a02-4a03-45e3-8bb8-99f77cd78caf_6jqbvxqyaede0\\LocalState\\dependence\\SAMPLE.exe", 5000));
-            //_runningAIModels[0].Status = "CHANGED";
+            string configJson = _iOService.SearchAndInitializeConfigJson(dependenceEXEPath);
+
+            int port = _iOService.GetAvailablePort(IPAddress.Loopback);
+            string name = Path.GetFileNameWithoutExtension(dependenceEXEPath);
+            var newModel = new AIModelM(id, dependenceEXEPath, port, configJson, name);
+
+            string jsonContent = File.ReadAllText(configJson);
+            JObject root = JObject.Parse(jsonContent);
+            if (root["instructionset"] is JArray jArray)
+            {
+                foreach(var i in jArray)
+                {
+                    //Debug.WriteLine(">>>"+i.ToString()+"\n");
+                    newModel.AddNewInstruction(_interpreter.InstructionGenerator(i.ToString(), async (invoker, parameters) =>
+                    {
+                        if(invoker is ModifiableInstruction instruction)
+                        {
+                            try
+                            {
+                                //todo
+                                var request = new HttpRequestMessage(HttpMethod.Get, $"/{instruction.InstructionName}");
+                                if (instruction.determinate is not false)
+                                {
+                                    Debug.WriteLine("==========START STREAM==========");
+                                    request.Headers.Add("Accept", "text/event-stream");
+                                    using var response = await newModel.httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
+                                    using var stream = await response.Content.ReadAsStreamAsync();
+                                    using var reader = new StreamReader(stream);
+                                    while (true)
+                                    {
+                                        var line = await reader.ReadLineAsync();
+                                        if(line == null)
+                                        {
+                                            //todo
+                                            break;
+                                        }
+                                        else
+                                        {
+                                            var json = line.Substring(6);
+                                            if (json.Contains("end"))
+                                            {
+                                                //todo
+                                                break;
+                                            }
+                                            else
+                                            {
+                                                //todo
+                                                Debug.WriteLine(line);
+                                            }
+                                        }
+                                    }
+                                    return instruction.TemplateReturn;
+                                }
+                                else
+                                {
+                                    var response = await newModel.httpClient.SendAsync(request);
+                                    string content = await response.Content.ReadAsStringAsync();
+                                    return _interpreter.InterpretArgument(content);
+                                }
+
+                            }
+                            catch (Exception e)
+                            {
+                                //todo
+                                throw;
+                            }
+                        }
+                        else
+                        {
+                            //todo
+                        }
+                        return null;
+                    }));
+                }
+            }
+
+            RunningAIModels.Add(newModel);
+            return newModel;
         }
+        
 
         //todo
         public async void CreatNewAIModelInstruction()
@@ -124,7 +206,7 @@ namespace FacialEmotionRecognitionHub.Bus.Services
             //    }
             //    return r;
             //});
-            Dictionary<string,object> newDict = new()
+            Dictionary<string, object> newDict = new()
             {
                 //newDict["model_type"] = "newModelType";
                 { "epochs", 10 }
@@ -136,12 +218,19 @@ namespace FacialEmotionRecognitionHub.Bus.Services
                 //await instruction.Execute();
                 await instruction.Execute(this, newDict);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Debug.WriteLine(ex);
                 throw;
             }
         }
 
+        public void Dispose()
+        {
+            foreach(var model in RunningAIModels)
+            {
+                model.Dispose();
+            }
+        }
     }
 }

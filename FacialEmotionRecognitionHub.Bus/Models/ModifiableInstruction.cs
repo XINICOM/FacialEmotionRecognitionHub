@@ -24,9 +24,15 @@ namespace FacialEmotionRecognitionHub.Bus.Models
             get { return _templateParameters; }
         }
         private Dictionary<string, object>? _templateReturn;
+        public Dictionary<string, object>? TemplateReturn
+        {
+            get { return _templateReturn; }
+        }
 
         //private bool _executable;
         private Command command = command;
+
+        public bool determinate = false;
 
         //public bool ExecutabilityUpdate(Func<ModifiableInstruction, bool>? predicate = null)
         //{
@@ -110,6 +116,7 @@ namespace FacialEmotionRecognitionHub.Bus.Models
                 _templateParameters = new();
             if (_templateParameters.Any(x => x.Key != parameterName))
             {
+                Debug.WriteLine($"{parameterName} = {templateValue} ({templateValue.GetType()})");
                 _templateParameters.Add(parameterName, templateValue);
             }
             else
