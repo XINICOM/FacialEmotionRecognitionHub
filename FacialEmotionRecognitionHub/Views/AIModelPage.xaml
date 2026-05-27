@@ -105,7 +105,6 @@
                             <StackPanel Spacing="12">
                                 <TextBlock Text="Control Panel"
                                            Style="{StaticResource SubtitleTextBlockStyle}" />
-                                
                                 <!--<TextBlock x:Name="TrainingStatusTxt"
                                            Text="Status: Idle"
                                            Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
