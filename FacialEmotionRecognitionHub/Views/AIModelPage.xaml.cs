@@ -30,11 +30,10 @@ namespace FacialEmotionRecognitionHub.Views
     /// </summary>
     public sealed partial class AIModelPage : Page
     {
-        //todo
-        public ObservableCollection<BaseParameter> LoadDataParameters { get; set; }
-        public ObservableCollection<BaseParameter> PreprocessParameters { get; set; }
-        public ObservableCollection<BaseParameter> TrainParameters { get; set; }
-        public ObservableCollection<BaseParameter> PredictParameters { get; set; }
+        //public ObservableCollection<BaseParameter> LoadDataParameters { get; set; }
+        //public ObservableCollection<BaseParameter> PreprocessParameters { get; set; }
+        //public ObservableCollection<BaseParameter> TrainParameters { get; set; }
+        //public ObservableCollection<BaseParameter> PredictParameters { get; set; }
 
 
 
@@ -62,61 +61,24 @@ namespace FacialEmotionRecognitionHub.Views
                 WeakReferenceMessenger.Default.Unregister<AIModelInitializedMessage>(this);
             });
 
-            Loaded += AIModelPage_Loaded;
+            //Loaded += AIModelPage_Loaded;
 
-            //todo
-            // 🚀 Tab 1 参数注入
-            //LoadDataParameters = new ObservableCollection<BaseParameter>()
-            //{
-            //    new FloatParameter { Name = "test_size", Header = "Test Size Ratio (test_size)", Value = 0.2 },
-            //    new IntParameter   { Name = "random_state", Header = "Random Seed (random_state)", Value = 42 },
-            //    new BoolParameter  { Name = "stratify", Header = "Stratify Split Data", Value = true },
-            //    new PathParameter  { Name = "load_path", Header = "Dataset CSV Source (load_path)", Value = @"\data\train\fer2013.csv" }
-            //};
-            //LoadDataParamsControl.ItemsSource = LoadDataParameters;
-
-            //// 🚀 Tab 2 参数注入
-            //PreprocessParameters = new ObservableCollection<BaseParameter>()
-            //{
-            //    new IntParameter { Name = "batch_size", Header = "Batch Size", Value = 64 }
-            //};
-            //PreprocessParamsControl.ItemsSource = PreprocessParameters;
-
-            //// 🚀 Tab 3 参数注入
-            //TrainParameters = new ObservableCollection<BaseParameter>()
-            //{
-            //    new IntParameter   { Name = "epochs", Header = "Epochs", Value = 20 },
-            //    new FloatParameter { Name = "lr", Header = "Learning Rate (lr)", Value = 0.001 },
-            //    new FloatParameter { Name = "weight_decay", Header = "Weight Decay", Value = 0.0001 },
-            //    new PathParameter  { Name = "load_model_path", Header = "Load Pretrained Model Path", Value = "path" },
-            //    new PathParameter  { Name = "save_path", Header = "Model Save Path", Value = "Back_end/model_save/model_CNN.pth" },
-            //    new BoolParameter  { Name = "verbose", Header = "Verbose Output Logs", Value = false }
-            //};
-            //TrainParamsControl.ItemsSource = TrainParameters;
-
-            //// 🚀 Tab 4 参数注入
-            //PredictParameters = new ObservableCollection<BaseParameter>()
-            //{
-            //    new PathParameter { Name = "model_type", Header = "Model Architecture Type", Value = "CNN" },
-            //    new PathParameter { Name = "load_model_path", Header = "Inference Model Path", Value = "Back_end/model_save/model_CNN.pth" },
-            //    new PathParameter { Name = "load_img_path", Header = "Target Inference Image", Value = "Back_end/data/predict/num0.png" }
-            //};
-            //PredictParamsControl.ItemsSource = PredictParameters;
+            
         }
 
-        private void AIModelPage_Loaded(object sender, RoutedEventArgs e)
-        {
-            if(VM is not null)
-            {
-                Debug.WriteLine("///" + VM.PivotItemVMs.Count());
-                foreach(var i in VM.PivotItemVMs)
-                {
-                    Debug.WriteLine("///" + i.Name);
-                }
+        //private void AIModelPage_Loaded(object sender, RoutedEventArgs e)
+        //{
+        //    if(VM is not null)
+        //    {
+        //        Debug.WriteLine("///" + VM.PivotItemVMs.Count());
+        //        foreach(var i in VM.PivotItemVMs)
+        //        {
+        //            Debug.WriteLine("///" + i.Name);
+        //        }
 
-            }
+        //    }
 
-        }
+        //}
 
         //public void InitializeWithAIModelM(AIModelM model) => VM?.SetAIModelM(model);
 
