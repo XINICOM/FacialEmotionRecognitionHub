@@ -63,6 +63,10 @@ namespace FacialEmotionRecognitionHub.Views
 
             //Loaded += AIModelPage_Loaded;
 
+            //__Pivot.SelectionChanged += (o, e) =>
+            //{
+            //    Debug.WriteLine("==="+__Pivot.ActualHeight);
+            //};
             
         }
 

@@ -7,7 +7,9 @@
       xmlns:viewmodels="using:FacialEmotionRecognitionHub.Bus.ViewModels"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-      mc:Ignorable="d">
+      mc:Ignorable="d"
+      VerticalAlignment="Stretch"
+      Height="Auto">
     <Page.Resources>
         <DataTemplate x:Key="IntTemplate"
                       x:DataType="models:IntParameter">
@@ -71,101 +73,125 @@
         <DataTemplate x:Key="PivotTemplate"
                       x:DataType="viewmodels:PivotItemVM">
             <!--<PivotItem Header="{x:Bind Name}">-->
-            <Grid Padding="12">
+            <Grid Padding="4"
+                  VerticalAlignment="Stretch">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="360" />
-                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="2*" />
+                    <ColumnDefinition Width="5*" />
                 </Grid.ColumnDefinitions>
-                <ScrollViewer Grid.Column="0"
-                              VerticalScrollBarVisibility="Auto"
-                              HorizontalScrollBarVisibility="Disabled"
-                              Margin="0,0,20,0">
-                    <StackPanel Spacing="16">
-                        <Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
-                                BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
-                                BorderThickness="1"
-                                CornerRadius="8"
-                                Padding="16">
-                            <StackPanel Spacing="12">
-                                <TextBlock Text="Hyperparameters"
-                                           Style="{StaticResource SubtitleTextBlockStyle}" />
+                <Grid VerticalAlignment="Stretch"
+                      Grid.Column="0"
+                      Margin="0,0,20,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <ScrollViewer Grid.Row="0"
+                                  VerticalScrollBarVisibility="Auto"
+                                  HorizontalScrollBarVisibility="Disabled">  <!--CornerRadius="8"-->
+                        <StackPanel Spacing="16">
+                            <Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                                    BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                                    BorderThickness="1"
+                                    Padding="16"
+                                    CornerRadius="8,8,0,0">
+                                <StackPanel Spacing="12">
+                                    <TextBlock Text="Hyperparameters"
+                                               Style="{StaticResource SubtitleTextBlockStyle}" />
 
-                                <ItemsControl x:Name="ParamsControl"
-                                              ItemTemplateSelector="{StaticResource ParamSelector}"
-                                              ItemsSource="{x:Bind Parameters}"
-                                              Margin="0,4,0,0" />
-                            </StackPanel>
-                        </Border>
+                                    <ItemsControl x:Name="ParamsControl"
+                                                  ItemTemplateSelector="{StaticResource ParamSelector}"
+                                                  ItemsSource="{x:Bind Parameters}"
+                                                  Margin="0,4,0,0" />
+                                </StackPanel>
+                            </Border>
 
-                        <Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
-                                BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
-                                BorderThickness="1"
-                                CornerRadius="8"
-                                Padding="16">
-                            <StackPanel Spacing="12">
-                                <TextBlock Text="Control Panel"
-                                           Style="{StaticResource SubtitleTextBlockStyle}" />
-                                <!--<TextBlock x:Name="TrainingStatusTxt"
+                        </StackPanel>
+                    </ScrollViewer>
+                    <Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                            BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                            BorderThickness="1"
+                            CornerRadius="0,0,8,8"
+                            Padding="16"
+                            Grid.Row="1"
+                            VerticalAlignment="Bottom"
+                            Margin="0,12,0,0">
+                        <StackPanel Spacing="12">
+                            <!--<TextBlock Text="Control Panel"
+                                       Style="{StaticResource SubtitleTextBlockStyle}" />-->
+                            <!--<TextBlock x:Name="TrainingStatusTxt"
                                            Text="Status: Idle"
                                            Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
                                            FontWeight="Bold" />-->
-                                <ProgressBar IsIndeterminate="False"
-                                             Value="0"
-                                             Margin="0,4,0,8"
-                                             x:Name="TrainingProgressBar" />
+                            <!--<ProgressBar IsIndeterminate="False"
+                                         Value="0"
+                                         Margin="0,4,0,8"
+                                         x:Name="TrainingProgressBar" />-->
 
-                                <Button Content="EXECUTE"
-                                        Style="{StaticResource AccentButtonStyle}"
-                                        HorizontalAlignment="Stretch" />
-                                <!--Click="StartTrainingButton_Click"-->
-                                <Grid ColumnDefinitions="*, *">
-                                    <Button x:Name="Pause"
-                                            Grid.Column="0"
-                                            Content="Pause"
-                                            HorizontalAlignment="Stretch"
-                                            Margin="0,0,6,0"
-                                            IsEnabled="False" />
-                                    <!--Click="PauseTrainingButton_Click"-->
-                                    <Button Grid.Column="1"
-                                            Content="Terminate"
-                                            Foreground="Red"
-                                            HorizontalAlignment="Stretch"
-                                            Margin="6,0,0,0" />
-                                    <!--Click="TerminateTrainingButton_Click"-->
-                                </Grid>
-                            </StackPanel>
-                        </Border>
-                    </StackPanel>
-                </ScrollViewer>
+                            <Button Content="EXECUTE"
+                                    Style="{StaticResource AccentButtonStyle}"
+                                    HorizontalAlignment="Stretch"
+                                    Command="{x:Bind ExecuteCommand}"/>
+                            <!--Click="StartTrainingButton_Click"-->
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <Button x:Name="PauseOrResume"
+                                        Grid.Column="0"
+                                        Content="{x:Bind PageVM.PromptShowed, Mode=OneWay}"
+                                        HorizontalAlignment="Stretch"
+                                        Margin="0,0,6,0"
+                                        Command="{x:Bind PageVM.PauseOrResumeCommand}"/>
+                                <!--Click="PauseTrainingButton_Click"-->
+                                <Button Grid.Column="1"
+                                        Content="Terminate"
+                                        Foreground="Red"
+                                        HorizontalAlignment="Stretch"
+                                        Margin="6,0,0,0"
+                                        Command="{x:Bind PageVM.TerminateCommand}"/>
+                                <!--Click="TerminateTrainingButton_Click"-->
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+                </Grid>
 
-                <Border Grid.Column="1"
-                        Background="#1E1E1E"
-                        CornerRadius="8"
-                        Padding="16">
-                    <Grid RowDefinitions="Auto, *">
-                        <TextBlock Grid.Row="0"
-                                   Text="Console stdout output"
-                                   Foreground="#888888"
+                <Grid Grid.Column="1"
+                      Background="#1E1E1E"
+                      CornerRadius="8"
+                      Padding="16"
+                      VerticalAlignment="Stretch">
+                    <!--<Grid>-->
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0"
+                               Text="Console Output"
+                               Foreground="#888888"
+                               FontFamily="Consolas"
+                               FontSize="12"
+                               Margin="0,0,0,8" />
+                    <ScrollViewer Grid.Row="1"
+                                  VerticalScrollBarVisibility="Auto">
+                        <TextBlock x:Name="TerminalBlock"
+                                   Text="{x:Bind PageVM.Console, Mode=OneWay}"
+                                   Foreground="White"
                                    FontFamily="Consolas"
-                                   FontSize="12"
-                                   Margin="0,0,0,8" />
-                        <ScrollViewer Grid.Row="1"
-                                      VerticalScrollBarVisibility="Auto">
-                            <TextBlock x:Name="TerminalBlock"
-                                       Text="[INFO] Terminal initialized. Waiting for train() execution...&#x0a;[IDLE] Ready."
-                                       Foreground="White"
-                                       FontFamily="Consolas"
-                                       FontSize="13"
-                                       LineHeight="20" />
-                        </ScrollViewer>
-                    </Grid>
-                </Border>
+                                   FontSize="13"
+                                   LineHeight="20" /><!--Text="[INFO] Terminal initialized. Waiting for train() execution...&#x0a;[IDLE] Ready.&#x0a;>>>TEST OUTPUT."-->
+                    </ScrollViewer>
+                    <!--</Grid>-->
+                </Grid>
             </Grid>
             <!--</PivotItem>-->
         </DataTemplate>
     </Page.Resources>
 
-    <Grid Padding="32">
+    <Grid Padding="32"
+          Height="Auto"
+          VerticalAlignment="Stretch">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
@@ -176,15 +202,15 @@
                     Spacing="4">
             <TextBlock Text="{x:Bind VM.ModelName}"
                        Style="{StaticResource TitleTextBlockStyle}" />
-            <TextBlock Text="{x:Bind VM.Status}"
+            <TextBlock Text="{x:Bind VM.Status, Mode=OneWay}"
                        Style="{StaticResource CaptionTextBlockStyle}"
-                       Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" 
-                       HorizontalAlignment="Right"/>
+                       Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
+                       HorizontalAlignment="Right" />
             <ProgressBar x:Name="ModelProgessBar"
-                         Value="{x:Bind VM.Value}"
-                         IsIndeterminate="{x:Bind VM.IsIndeterminate}"
-                         ShowError="{x:Bind VM.ShowError}"
-                         ShowPaused="{x:Bind VM.ShowPaused}"
+                         Value="{x:Bind VM.Value, Mode=OneWay}"
+                         IsIndeterminate="{x:Bind VM.IsIndeterminate, Mode=OneWay}"
+                         ShowError="{x:Bind VM.ShowError, Mode=OneWay}"
+                         ShowPaused="{x:Bind VM.ShowPaused, Mode=OneWay}"
                          Background="{ThemeResource SystemControlForegroundBaseMediumBrush}" />
         </StackPanel>
 
@@ -192,10 +218,12 @@
                Margin="-12,0,-12,0"
                ItemsSource="{x:Bind VM.PivotItemVMs}"
                ItemTemplate="{StaticResource PivotTemplate}" />-->
-        <Pivot Grid.Row="1"
+        <Pivot x:Name="__Pivot"
+               Grid.Row="1"
                Margin="-12,0,-12,0"
                ItemsSource="{x:Bind VM.PivotItemVMs}"
-               ItemTemplate="{StaticResource PivotTemplate}">
+               ItemTemplate="{StaticResource PivotTemplate}"
+               VerticalAlignment="Stretch">
             <!--<Pivot.Transitions>
                 <TransitionCollection>
                     
@@ -208,7 +236,14 @@
             </Pivot.HeaderTemplate>
         </Pivot>
 
-
+        <!--<Grid Background="#FFFFFF"
+              Width="100"
+              HorizontalAlignment="Right" 
+              Grid.Row="1"
+              Height="Auto"
+              VerticalAlignment="Stretch"
+              CornerRadius="8"
+              Padding="16" />-->
 
     </Grid>
 

@@ -29,6 +29,7 @@ namespace FacialEmotionRecognitionHub.Bus.Services
             Dictionary<string, object> result = new();
             if (source is not null)
             {
+                Debug.WriteLine(source.ToString());
                 foreach (var p in ((JObject)source).Properties())
                 {
                     string key = p.Name.ToString();
@@ -43,7 +44,10 @@ namespace FacialEmotionRecognitionHub.Bus.Services
                     }
                     else if (IsValidFilePathFormat(value))
                     {
-                        result.Add(key, Path.GetExtension(value));
+                        if(key.Contains("save"))
+                            result.Add(key, Path.GetFileName(value));
+                        else
+                            result.Add(key, Path.GetExtension(value));
                     }
                     else if (value == "True")
                     {

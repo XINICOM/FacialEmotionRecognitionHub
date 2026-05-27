@@ -109,7 +109,10 @@ namespace FacialEmotionRecognitionHub.Bus.Services
                                 {
                                     var response = await newModel.httpClient.SendAsync(request);
                                     string content = await response.Content.ReadAsStringAsync();
-                                    return _interpreter.InterpretArgument(content);
+                                    //todo
+                                    return _interpreter.InterpretArgument(JObject.Parse(content));
+                                    //return _interpreter.InterpretArgument(content);
+                                    //return instruction.TemplateReturn;
                                 }
 
                             }

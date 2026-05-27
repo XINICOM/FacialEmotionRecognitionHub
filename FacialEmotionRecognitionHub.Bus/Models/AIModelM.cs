@@ -17,6 +17,7 @@ namespace FacialEmotionRecognitionHub.Bus.Models
         DeterminatedProcessing,
         IndeterminatedProcessing,
         Pause,
+        Relax,
     }
 
     public class AIModelM : IDisposable
@@ -115,12 +116,15 @@ namespace FacialEmotionRecognitionHub.Bus.Models
         public bool ShowError { get { return _showError; } }
         private bool _showPaused = false;
         public bool ShowPaused { get { return _showPaused; } }
-        private bool _isIndeterminate = true;
+        private bool _isIndeterminate = false;
         public bool IsIndeterminate { get { return _isIndeterminate; } }
         private string _status = "No Progress";
         public string Status { get { return _status; } }
-        private float _value = 0.0f;
-        public float Value { get { return _value; } }
+
+        //private ModelStatus _status;
+        public ModelStatus modelStatus = ModelStatus.Relax;
+        private float _value = 0f;
+        public float Value {  get { return _value; } }
         private DateTime _id;
         public DateTime ID { get { return _id; } }
 
@@ -150,36 +154,47 @@ namespace FacialEmotionRecognitionHub.Bus.Models
 
 
 
-        public void SetModelStatus(ModelStatus target, float progress = 0)
+        public void SetModelStatus(ModelStatus target, float progress = 0f)
         {
-            if(target == ModelStatus.Error)
+            if (target == ModelStatus.Error)
             {
                 _showError = true;
                 _showPaused = false;
+                _isIndeterminate = true;
                 _status = "ERROR";
                 _value = 0;
             }
-            else if(target == ModelStatus.Pause)
+            else if (target == ModelStatus.Pause)
             {
                 _showError = false;
                 _showPaused = true;
+                _isIndeterminate = true;
                 _status = "PAUSE";
             }
-            else if(target == ModelStatus.IndeterminatedProcessing)
+            else if (target == ModelStatus.IndeterminatedProcessing)
             {
                 _showError = false;
                 _showPaused = false;
                 _isIndeterminate = true;
                 _status = "PROCESSING";
             }
-            else
+            else if(target == ModelStatus.DeterminatedProcessing)
             {
                 _showError = false;
                 _showPaused = false;
                 _isIndeterminate = false;
                 _status = "PROCESSING";
-                _value = 0;
+                _value = progress;
             }
+            else
+            {
+                _showError = false;
+                _showPaused = false;
+                _isIndeterminate = false;
+                _status = "RELAX";
+                _value = 0f;
+            }
+            modelStatus = target;
         }
 
 

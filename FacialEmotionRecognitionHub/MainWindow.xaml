@@ -44,7 +44,8 @@
                  Grid.Row="1"
                  TabItemsSource="{x:Bind VM.TabViewItems}"
                  SelectedItem="{x:Bind VM.SelectedTabViewItem, Mode=TwoWay}"
-                 TabWidthMode="Equal"><!--SelectionChanged="MainTabView_SelectionChanged"-->
+                 TabWidthMode="Equal"
+                 VerticalAlignment="Stretch"><!--SelectionChanged="MainTabView_SelectionChanged"-->
             <!--<TabViewItem Header="首页"
                          IsClosable="False">
                 <StackPanel Orientation="Horizontal"
