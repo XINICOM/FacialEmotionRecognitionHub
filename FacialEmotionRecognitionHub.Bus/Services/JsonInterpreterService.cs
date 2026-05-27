@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -13,6 +14,16 @@ namespace FacialEmotionRecognitionHub.Bus.Services
 {
     public class JsonInterpreterService : IInterpreter
     {
+        public string FormatInstructionName(string input)
+        {
+            // 1. 将下划线替换为空格
+            string withSpaces = input.Replace('_', ' ');
+
+            // 2. 转换为 Title Case（每个单词首字母大写）
+            TextInfo textInfo = CultureInfo.CurrentCulture.TextInfo;
+            return textInfo.ToTitleCase(withSpaces);
+        }
+
         public Dictionary<string, object> InterpretArgument(object source)
         {
             Dictionary<string, object> result = new();

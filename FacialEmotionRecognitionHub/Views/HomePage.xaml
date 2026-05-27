@@ -48,7 +48,7 @@
                                    Margin="0,2,0,12" />
                         
                         <ProgressBar Grid.Row="2"
-                                     Value="100"
+                                     Value="{x:Bind Value}"
                                      IsIndeterminate="{x:Bind IsIndeterminate}"
                                      ShowError="{x:Bind ShowError}"
                                      ShowPaused="{x:Bind ShowPaused}"
