@@ -76,7 +76,8 @@
             <Grid Padding="4"
                   VerticalAlignment="Stretch">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="2*" />
+                    <ColumnDefinition Width="2*"
+                                      MaxWidth="300"/>
                     <ColumnDefinition Width="5*" />
                 </Grid.ColumnDefinitions>
                 <Grid VerticalAlignment="Stretch"

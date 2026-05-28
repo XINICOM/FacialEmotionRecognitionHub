@@ -68,9 +68,10 @@ namespace FacialEmotionRecognitionHub.Views
             {
                 DispatcherQueue.TryEnqueue(() =>
                 {
-                    if(VM is not null)
+                    if(m.ID == _id && VM is not null)
                     {
-                        VM.Console += m.Text;
+                        //VM.Console += m.Text;
+                        VM.UpdateConsole();
                         //Debug.WriteLine("CCCCCCCCCCCCCCCCCCC");
                     }
 

@@ -16,10 +16,10 @@ using WinRT;
 namespace FacialEmotionRecognitionHub.Bus.ViewModels
 {
     //todo
-    public class ConsoleOutputMessage
-    {
-        public string Text { get; set; }
-    }
+    //public class ConsoleOutputMessage
+    //{
+    //    public string Text { get; set; }
+    //}
 
     public partial class AIModelPageVM : ObservableObject
     {
@@ -69,15 +69,15 @@ namespace FacialEmotionRecognitionHub.Bus.ViewModels
             //});
         }
 
-        //private void UpdateConsole()
-        //{
-        //    if (model.Console != string.Empty)
-        //    {
-        //        Console += model.Console;
-        //        model.Console = string.Empty;
+        public void UpdateConsole()
+        {
+            if (model.Console != string.Empty)
+            {
+                Console += model.Console;
+                model.Console = string.Empty;
 
-        //    }
-        //}
+            }
+        }
 
         public void SetAIModelM(AIModelM model)
         {

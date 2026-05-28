@@ -8,6 +8,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Messaging;
+using FacialEmotionRecognitionHub.Bus.Messages;
 using FacialEmotionRecognitionHub.Bus.Services;
 using FacialEmotionRecognitionHub.Bus.ViewModels;
 
@@ -41,21 +42,23 @@ namespace FacialEmotionRecognitionHub.Bus.Models
                     _console = value;
                     if(value != string.Empty)
                     {
-                        OnConsoleChanged?.Invoke();
+                        WeakReferenceMessenger.Default.Send(new AIModelInitializedMessage(this));
+                        WeakReferenceMessenger.Default.Send(new ConsoleOutputMessage(ID));
+
+                        //OnConsoleChanged?.Invoke();
                     }
                 }
             }
         }
-        public event Action OnConsoleChanged;
+        //public event Action OnConsoleChanged;
 
         public AIModelM(DateTime id, string dependenceEXEPath, int port, string modelConfigJson, string name)
         {
-            //todo
-            OnConsoleChanged += () =>
-            {
-                Debug.Write(Console);
-                Console = string.Empty;
-            };
+            //OnConsoleChanged += () =>
+            //{
+            //    Debug.Write(Console);
+            //    Console = string.Empty;
+            //};
 
 
             ModelConfigJson = modelConfigJson;
@@ -139,6 +142,10 @@ namespace FacialEmotionRecognitionHub.Bus.Models
             if (!string.IsNullOrEmpty(e.Data))
             {
                 Debug.WriteLine($">>>[错误] {e.Data}");
+                var s = e.Data.ToLower();
+                if (s.Contains("development server") || s.Contains("127.0.0.1 - - ") || s.Contains(" * running on http://127.0.0.1:") || s.Contains("press ctrl+c to quit"))
+                    return;
+                Console += $"[GETERROR]\n>>>>>>>>>>{e.Data}\n";
             }
             //throw new NotImplementedException();
         }
@@ -150,16 +157,13 @@ namespace FacialEmotionRecognitionHub.Bus.Models
 
                 //Console += "[RECEIVED]" + e.Data + "\n";
                 //todo
-                WeakReferenceMessenger.Default.Send(new ConsoleOutputMessage
-                {
-                    Text = "[RECEIVED]" + e.Data + "\n"
-                });
 
 
-                Console += "[RECEIVED]" + e.Data + "\n";
+                Console += $"[RECEIVED]{e.Data}\n";
+                //WeakReferenceMessenger.Default.Send(new ConsoleOutputMessage(ID));
                 
 
-                //Debug.WriteLine($">>>[输出] {e.Data}");
+                Debug.WriteLine($">>>[输出] {e.Data}");
                 // 或者更新 UI
             }
             //throw new NotImplementedException();
