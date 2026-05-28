@@ -89,7 +89,7 @@ namespace FacialEmotionRecognitionHub.Bus.ViewModels
         //todo
         public async Task AddTabViewItem(nint sender, object page, DateTime id)
         {
-            var exeFile = await iOService.OpenFileClick(sender);
+            var exeFile = await iOService.OpenFileClick(sender, [".exe"]);
             if (exeFile is null)
                 return;
             Debug.WriteLine(exeFile);

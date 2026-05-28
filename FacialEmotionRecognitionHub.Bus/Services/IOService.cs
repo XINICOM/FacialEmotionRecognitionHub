@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
@@ -69,7 +70,7 @@ namespace FacialEmotionRecognitionHub.Bus.Services
             return port;
         }
 
-        public async Task<string> OpenFileClick(nint sender)
+        public async Task<string> OpenFileClick(nint sender, IList<string> extentions = null)
         {
             // 获取当前窗口的 ID（新版 API 需要）
             //var hwnd = WinRT.Interop.WindowNative.GetWindowHandle(sender);
@@ -78,8 +79,20 @@ namespace FacialEmotionRecognitionHub.Bus.Services
             var openPicker = new FileOpenPicker(appWindow.Id)  // 构造函数传入窗口 ID
             {
                 ViewMode = PickerViewMode.List, // 仍然是枚举
-                FileTypeFilter = { ".exe" }
+                //FileTypeFilter = { ".exe" },
             };
+            if (extentions != null && extentions.Count > 0)
+            {
+                foreach (var filter in extentions)
+                {
+                    openPicker.FileTypeFilter.Add(filter);
+                }
+            }
+            else
+            {
+                // 默认显示所有文件
+                openPicker.FileTypeFilter.Add("*");
+            }
             openPicker.SuggestedStartFolder = DependencePath;
             // 注意：新版 API 没有 SuggestedStartFolder 属性
             // 如果需要指定自定义文件夹，可以使用 SuggestedStartLocation 枚举

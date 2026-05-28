@@ -57,6 +57,33 @@
                         <StackPanel Grid.Row="3"
                                     Margin="0,12,0,0"
                                     Spacing="16">
+                            <!--<StackPanel>-->
+                                <TextBlock Text="Validation Accuracy"
+                                           Style="{StaticResource CaptionTextBlockStyle}"
+                                           Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" />
+                                <TextBlock Text="87.5%"
+                                           Style="{StaticResource DisplayTextBlockStyle}"
+                                           Foreground="Green" />
+                            <!--</StackPanel>-->
+                            <!--<StackPanel>
+                                <TextBlock Text="Inference Latency (Per Frame)"
+                                           Style="{StaticResource CaptionTextBlockStyle}"
+                                           Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" />
+                                <TextBlock Text="45 ms"
+                                           Style="{StaticResource TitleTextBlockStyle}"
+                                           Foreground="{ThemeResource SystemFillColorAttentionBrush}" />
+                            </StackPanel>
+                            <StackPanel>
+                                <TextBlock Text="Total Training Epochs"
+                                           Style="{StaticResource CaptionTextBlockStyle}"
+                                           Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" />
+                                <TextBlock Text="50 / 50"
+                                           Style="{StaticResource BodyTextBlockStyle}" />
+                            </StackPanel>-->
+                        </StackPanel>
+                        <!--<StackPanel Grid.Row="3"
+                                    Margin="0,12,0,0"
+                                    Spacing="16">
                             <StackPanel>
                                 <TextBlock Text="Validation Accuracy"
                                            Style="{StaticResource CaptionTextBlockStyle}"
@@ -80,7 +107,7 @@
                                 <TextBlock Text="50 / 50"
                                            Style="{StaticResource BodyTextBlockStyle}" />
                             </StackPanel>
-                        </StackPanel>
+                        </StackPanel>-->
                     </Grid>
                 </Border>
             </ItemContainer>
