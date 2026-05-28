@@ -92,7 +92,7 @@ namespace FacialEmotionRecognitionHub.Bus.ViewModels
             var exeFile = await iOService.OpenFileClick(sender, [".exe"]);
             if (exeFile is null)
                 return;
-            Debug.WriteLine(exeFile);
+            //Debug.WriteLine(exeFile);
 
 
             //todo

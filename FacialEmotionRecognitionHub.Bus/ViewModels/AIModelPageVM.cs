@@ -25,6 +25,8 @@ namespace FacialEmotionRecognitionHub.Bus.ViewModels
 
     public partial class AIModelPageVM : ObservableObject
     {
+        private nint _windowNint;
+
         [ObservableProperty]
         private string _console = string.Empty;
 
@@ -54,17 +56,19 @@ namespace FacialEmotionRecognitionHub.Bus.ViewModels
 
         private AIModelM model;
         private IInterpreter _interpreter;
+        private IOService _ioService;
 
         [ObservableProperty]
         private string _modelName;
 
         //private bool needReturnJSON = false;
 
-        public AIModelPageVM(IInterpreter interpreter)
+        public AIModelPageVM(IInterpreter interpreter, IOService iOService)
         {
             _pivotItemVMs = [];
             _modelName = "Default Model Name";
             _interpreter = interpreter;
+            _ioService = iOService;
 
             //todo
             //WeakReferenceMessenger.Default.Register<ConsoleOutputMessage>(this, (r, m) =>
@@ -75,6 +79,11 @@ namespace FacialEmotionRecognitionHub.Bus.ViewModels
             //{
             //    UpdateModelStatus();
             //});
+        }
+
+        public void GivePageCite(nint n)
+        {
+            _windowNint = n;
         }
 
         public void UpdateConsole()
@@ -138,7 +147,7 @@ namespace FacialEmotionRecognitionHub.Bus.ViewModels
                 PivotItemVMs.Clear();
                 foreach (var instruction in model.ModifiableInstructionSet)
                 {
-                    var newPivotItemVM = new PivotItemVM(this, _interpreter);
+                    var newPivotItemVM = new PivotItemVM(this, _interpreter, _ioService, _windowNint);
                     var iName = instruction.InstructionName;
                     //Debug.WriteLine("===" + iName);
                     if (iName.Contains("layer") || iName.Contains("resume") || iName.Contains("pause") || iName.Contains("terminate"))

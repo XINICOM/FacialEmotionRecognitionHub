@@ -76,7 +76,10 @@ namespace FacialEmotionRecognitionHub.Bus.Services
                                 var httpPath = $"/{instruction.InstructionName}";
                                 if(instruction.TemplateParameters is not null)
                                 {
-                                    httpPath += "/" + JsonConvert.SerializeObject(parameters);
+                                    var p = JsonConvert.SerializeObject(parameters);
+                                    p = p.Replace('\\', ',').Replace('/', ',');
+                                    httpPath += "/" + p;
+                                    Debug.WriteLine(httpPath);
                                 }
 
 

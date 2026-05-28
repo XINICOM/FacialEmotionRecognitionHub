@@ -42,11 +42,12 @@ namespace FacialEmotionRecognitionHub.Views
 
         private AIModelPageVM? VM;
 
-        public AIModelPage(DateTime id)
+        public AIModelPage(DateTime id, nint n)
         {
             InitializeComponent();
             _id = id;
             VM = App.Current.Services.GetService<AIModelPageVM>();
+            VM?.GivePageCite(n);
 
             //if(VM != null )
             //    VM.Console = "NEW";
@@ -114,6 +115,11 @@ namespace FacialEmotionRecognitionHub.Views
                 }
             };
         }
+
+        //private void Button_Click(object sender, RoutedEventArgs e)
+        //{
+
+        //}
 
         //private void ScrollViewer_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)
         //{

@@ -240,7 +240,7 @@ namespace FacialEmotionRecognitionHub.Bus.Models
         }
 
 
-        private AIModelConnectionService _aIModelConnectionService;
+        //private AIModelConnectionService _aIModelConnectionService;
         public List<ModifiableInstruction> ModifiableInstructionSet;
 
         //public AIModelM(AIModelConnectionService aIModelConnectionService, string instructionSet)

@@ -14,6 +14,8 @@ namespace FacialEmotionRecognitionHub.Bus.ViewModels
     public partial class PivotItemVM : ObservableObject
     {
         private IInterpreter _interpreter;
+        private IOService _ioService;
+        private nint _windowNint;
 
         //[ObservableProperty]
         //private string _buttonText = "Pause";
@@ -31,12 +33,13 @@ namespace FacialEmotionRecognitionHub.Bus.ViewModels
 
         private ModifiableInstruction _instruction;
 
-        public PivotItemVM(AIModelPageVM pageVM, IInterpreter interpreter)
+        public PivotItemVM(AIModelPageVM pageVM, IInterpreter interpreter, IOService ioService, nint n)
         {
-            this._pageVM = pageVM;
+            _pageVM = pageVM;
             //this.pageVM = pageVM;
             _interpreter = interpreter;
-
+            _ioService = ioService;
+            _windowNint = n;
             //_pageVM.PropertyChanged += (s, e) =>
             //{
             //    if (e.PropertyName == nameof(_pageVM.PromptShowed))
@@ -86,6 +89,9 @@ namespace FacialEmotionRecognitionHub.Bus.ViewModels
                 {
                     @params.Add(new PathParameter
                     {
+                        sender = _windowNint,
+                        IOService = _ioService,
+                        ItemVM = this,
                         Name = param.Key,
                         Value = s,
                         Header = _interpreter.FormatInstructionName(param.Key),

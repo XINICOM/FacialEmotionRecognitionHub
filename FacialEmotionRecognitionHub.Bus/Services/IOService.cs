@@ -17,8 +17,8 @@ namespace FacialEmotionRecognitionHub.Bus.Services
     {
         private StorageFolder _storageFolder;
 
-        string DependencePath = string.Empty;
-        string ModelsPath = string.Empty;
+        public string DependencePath = string.Empty;
+        public string ModelsPath = string.Empty;
 
         public IOService(StorageFolder storageFolder)
         {
@@ -93,6 +93,7 @@ namespace FacialEmotionRecognitionHub.Bus.Services
                 // 默认显示所有文件
                 openPicker.FileTypeFilter.Add("*");
             }
+            Debug.WriteLine(DependencePath);
             openPicker.SuggestedStartFolder = DependencePath;
             // 注意：新版 API 没有 SuggestedStartFolder 属性
             // 如果需要指定自定义文件夹，可以使用 SuggestedStartLocation 枚举
