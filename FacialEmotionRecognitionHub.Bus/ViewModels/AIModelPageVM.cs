@@ -8,9 +8,11 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
+using FacialEmotionRecognitionHub.Bus.Messages;
 using FacialEmotionRecognitionHub.Bus.Models;
 using FacialEmotionRecognitionHub.Bus.Services;
 using Microsoft.UI.Xaml.Controls;
+using Newtonsoft.Json.Linq;
 using WinRT;
 
 namespace FacialEmotionRecognitionHub.Bus.ViewModels
@@ -56,6 +58,8 @@ namespace FacialEmotionRecognitionHub.Bus.ViewModels
         [ObservableProperty]
         private string _modelName;
 
+        //private bool needReturnJSON = false;
+
         public AIModelPageVM(IInterpreter interpreter)
         {
             _pivotItemVMs = [];
@@ -67,6 +71,10 @@ namespace FacialEmotionRecognitionHub.Bus.ViewModels
             //{
             //    Console += m.Text;
             //});
+            //WeakReferenceMessenger.Default.Register<ModelStatusMessage>(this, (r, m) =>
+            //{
+            //    UpdateModelStatus();
+            //});
         }
 
         public void UpdateConsole()
@@ -74,8 +82,46 @@ namespace FacialEmotionRecognitionHub.Bus.ViewModels
             if (model.Console != string.Empty)
             {
                 Console += model.Console;
-                model.Console = string.Empty;
+                UpdateModelStatus();
+                //var result = string.Empty;
+                //if (model.Console.StartsWith("[RECEIVED]"))
+                //{
+                //    result = model.Console.Substring("[RECEIVED]".Length);
+                //    if (result[0] == '\uFEFF')
+                //    {
+                //        Debug.WriteLine("TRUE");
+                //        result = result.Substring(1);
+                //    }
+                //}
 
+                //Debug.WriteLine(">>>>>>>>>>>>"+result);
+
+                //if (needReturnJSON)
+                //{
+                //    try
+                //    {
+                //        var json = JObject.Parse(result);
+                //        var returns = _interpreter.InterpretArgument(json);
+                //        float t = 0f, c = 0f;
+                //        foreach(var item in returns)
+                //        {
+                //            if (item.Key.ToLower().Contains("total"))
+                //                t = Convert.ToSingle(item.Value);
+                //            //t = (float)item.Value;
+                //            if (item.Key.ToLower().Contains("current"))
+                //                c = Convert.ToSingle(item.Value);
+                //                //c = (float)item.Value;
+                //        }
+                //        model.SetModelStatus(ModelStatus.DeterminatedProcessing, t != 0 ? c / t * 100 : 0);
+                //        UpdateModelStatus();
+                //    }
+                //    catch
+                //    {
+                //        Debug.WriteLine("NO JSON");
+                //        //throw;
+                //    }
+                //}
+                model.Console = string.Empty;
             }
         }
 
@@ -212,7 +258,7 @@ namespace FacialEmotionRecognitionHub.Bus.ViewModels
                         {
                             Debug.WriteLine("//////PAUSE");
                             model.SetModelStatus(ModelStatus.Pause);
-                            ShowPaused = true;
+                            //ShowPaused = true;
 
                         }
                         else
@@ -303,15 +349,14 @@ namespace FacialEmotionRecognitionHub.Bus.ViewModels
                 Console += iName + "\n";
                 if (i.Determinate)
                 {
+                    model.needReturnJSON = true;
                     model.SetModelStatus(ModelStatus.DeterminatedProcessing);
                     UpdateModelStatus();
-
                 }
                 else if (!i.Determinate)
                 {
                     model.SetModelStatus(ModelStatus.IndeterminatedProcessing);
                     UpdateModelStatus();
-
                 }
 
                 var result = await i.Execute(i, param);
@@ -333,6 +378,7 @@ namespace FacialEmotionRecognitionHub.Bus.ViewModels
                     {
                         model.SetModelStatus(ModelStatus.Error);
                     }
+                    model.needReturnJSON = false;
                 }
                 UpdateModelStatus();
 

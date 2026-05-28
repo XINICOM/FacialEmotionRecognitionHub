@@ -11,6 +11,7 @@ using CommunityToolkit.Mvvm.Messaging;
 using FacialEmotionRecognitionHub.Bus.Messages;
 using FacialEmotionRecognitionHub.Bus.Services;
 using FacialEmotionRecognitionHub.Bus.ViewModels;
+using Newtonsoft.Json.Linq;
 
 namespace FacialEmotionRecognitionHub.Bus.Models
 {
@@ -25,6 +26,8 @@ namespace FacialEmotionRecognitionHub.Bus.Models
 
     public class AIModelM : IDisposable
     {
+        public bool needReturnJSON = false;
+        private AIModelsManager _aIModelsManager;
         public Process Process;
 
         private string _console = string.Empty;
@@ -52,14 +55,14 @@ namespace FacialEmotionRecognitionHub.Bus.Models
         }
         //public event Action OnConsoleChanged;
 
-        public AIModelM(DateTime id, string dependenceEXEPath, int port, string modelConfigJson, string name)
+        public AIModelM(AIModelsManager manager, DateTime id, string dependenceEXEPath, int port, string modelConfigJson, string name)
         {
             //OnConsoleChanged += () =>
             //{
             //    Debug.Write(Console);
             //    Console = string.Empty;
             //};
-
+            _aIModelsManager = manager;
 
             ModelConfigJson = modelConfigJson;
             DependenceEXEPath = dependenceEXEPath;
@@ -157,7 +160,43 @@ namespace FacialEmotionRecognitionHub.Bus.Models
 
                 //Console += "[RECEIVED]" + e.Data + "\n";
                 //todo
+                var result = e.Data;
 
+                if (result[0] == '\uFEFF')
+                {
+                    Debug.WriteLine("TRUE");
+                    result = result.Substring(1);
+                }
+
+
+                Debug.WriteLine(">>>>>>>>>>>>" + result);
+
+                if (needReturnJSON)
+                {
+                    try
+                    {
+                        var json = JObject.Parse(result);
+                        var returns = _aIModelsManager.Interpreter.InterpretArgument(json);
+                        float t = 0f, c = 0f;
+                        foreach (var item in returns)
+                        {
+                            if (item.Key.ToLower().Contains("total"))
+                                t = Convert.ToSingle(item.Value);
+                            //t = (float)item.Value;
+                            if (item.Key.ToLower().Contains("current"))
+                                c = Convert.ToSingle(item.Value);
+                            //c = (float)item.Value;
+                        }
+                        SetModelStatus(ModelStatus.DeterminatedProcessing, t != 0 ? c / t * 100 : 0);
+                        //WeakReferenceMessenger.Default.Send(new ModelStatusMessage());
+                        //UpdateModelStatus();
+                    }
+                    catch
+                    {
+                        Debug.WriteLine("NO JSON");
+                        //throw;
+                    }
+                }
 
                 Console += $"[RECEIVED]{e.Data}\n";
                 //WeakReferenceMessenger.Default.Send(new ConsoleOutputMessage(ID));
@@ -215,6 +254,8 @@ namespace FacialEmotionRecognitionHub.Bus.Models
 
         public void SetModelStatus(ModelStatus target, float progress = 0f)
         {
+            WeakReferenceMessenger.Default.Send(new ModelStatusMessage());
+
             if (target == ModelStatus.Error)
             {
                 _showError = true;
@@ -239,6 +280,7 @@ namespace FacialEmotionRecognitionHub.Bus.Models
             }
             else if(target == ModelStatus.DeterminatedProcessing)
             {
+                //Debug.WriteLine("))))))))))))))))))))))))))))))))))))))");
                 _showError = false;
                 _showPaused = false;
                 _isIndeterminate = false;

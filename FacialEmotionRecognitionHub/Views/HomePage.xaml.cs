@@ -5,6 +5,8 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using CommunityToolkit.Mvvm.Messaging;
+using FacialEmotionRecognitionHub.Bus.Messages;
+
 //using FacialEmotionRecognitionHub.Bus.Messages;
 using FacialEmotionRecognitionHub.Bus.Models;
 using FacialEmotionRecognitionHub.Bus.ViewModels;
@@ -36,6 +38,15 @@ namespace FacialEmotionRecognitionHub.Views
             VM = App.Current.Services.GetService<HomePageVM>();
             DataContext = VM;
             Loading += OnPageLoaded;
+
+            WeakReferenceMessenger.Default.Register<ModelStatusMessage>(this, (o, m) =>
+            {
+                DispatcherQueue.TryEnqueue(() =>
+                {
+                    VM?.UpdateAIModelMsCommand.Execute(null);
+
+                });
+            });
         }
         private void OnPageLoaded(object sender, object e)
         {

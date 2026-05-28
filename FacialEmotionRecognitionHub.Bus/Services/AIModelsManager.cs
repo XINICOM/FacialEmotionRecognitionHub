@@ -23,7 +23,7 @@ namespace FacialEmotionRecognitionHub.Bus.Services
     {
         private StorageFolder _storageFolder;
         public List<AIModelM> RunningAIModels;
-        private IInterpreter _interpreter;
+        public IInterpreter Interpreter;
         private IOService _iOService;
         //public List<AIModelM> RunningAIModels
         //{
@@ -35,7 +35,7 @@ namespace FacialEmotionRecognitionHub.Bus.Services
         public AIModelsManager(StorageFolder storageFolder, IInterpreter interpreter, IOService iOService)
         {
             _storageFolder = storageFolder;
-            _interpreter = interpreter;
+            Interpreter = interpreter;
             RunningAIModels = [];
             _iOService = iOService;
 
@@ -56,7 +56,7 @@ namespace FacialEmotionRecognitionHub.Bus.Services
 
             int port = _iOService.GetAvailablePort(IPAddress.Loopback);
             string name = Path.GetFileNameWithoutExtension(dependenceEXEPath);
-            var newModel = new AIModelM(id, dependenceEXEPath, port, configJson, name);
+            var newModel = new AIModelM(this, id, dependenceEXEPath, port, configJson, name);
 
             string jsonContent = File.ReadAllText(configJson);
             JObject root = JObject.Parse(jsonContent);
@@ -65,7 +65,7 @@ namespace FacialEmotionRecognitionHub.Bus.Services
                 foreach(var i in jArray)
                 {
                     //Debug.WriteLine(">>>"+i.ToString()+"\n");
-                    newModel.AddNewInstruction(_interpreter.InstructionGenerator(i.ToString(), async (invoker, parameters) =>
+                    newModel.AddNewInstruction(Interpreter.InstructionGenerator(i.ToString(), async (invoker, parameters) =>
                     {
                         if(invoker is ModifiableInstruction instruction)
                         {
@@ -83,51 +83,55 @@ namespace FacialEmotionRecognitionHub.Bus.Services
 
                                 var request = new HttpRequestMessage(HttpMethod.Get, httpPath);
 
-                                //todo
-                                if (instruction.Determinate)
-                                {
-                                    Debug.WriteLine("==========START STREAM==========");
-                                    request.Headers.Add("Accept", "text/event-stream");
-                                    using var response = await newModel.httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
-                                    using var stream = await response.Content.ReadAsStreamAsync();
-                                    using var reader = new StreamReader(stream);
-                                    while (true)
-                                    {
-                                        var line = await reader.ReadLineAsync();
-                                        if(line == null)
-                                        {
-                                            //todo
-                                            break;
-                                        }
-                                        else
-                                        {
-                                            var json = line.Substring(6);
-                                            if (json.Contains("end"))
-                                            {
-                                                //todo
-                                                break;
-                                            }
-                                            else
-                                            {
-                                                //todo
-                                                //Debug.WriteLine(line);
-                                            }
-                                        }
-                                    }
-                                    return instruction.TemplateReturn;
-                                }
-                                else
-                                {
-                                    Debug.WriteLine("==========DEFAULT==========");
+                                
+                                //if (false)//instruction.Determinate
+                                //{
+                                //    Debug.WriteLine("==========START STREAM==========");
+                                //    request.Headers.Add("Accept", "text/event-stream");
+                                //    using var response = await newModel.httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
+                                //    using var stream = await response.Content.ReadAsStreamAsync();
+                                //    using var reader = new StreamReader(stream);
+                                //    while (true)
+                                //    {
+                                //        var line = await reader.ReadLineAsync();
+                                //        if(line == null)
+                                //        {
+                                //            //todo
+                                //            break;
+                                //        }
+                                //        else
+                                //        {
+                                //            var json = line.Substring(6);
+                                //            if (json.Contains("end"))
+                                //            {
+                                //                //todo
+                                //                break;
+                                //            }
+                                //            else
+                                //            {
+                                //                //todo
+                                //                //Debug.WriteLine(line);
+                                //            }
+                                //        }
+                                //    }
+                                //    return instruction.TemplateReturn;
+                                //}
+                                //else
+                                //{
+                                //    Debug.WriteLine("==========DEFAULT==========");
 
-                                    var response = await newModel.httpClient.SendAsync(request);
-                                    string content = await response.Content.ReadAsStringAsync();
-                                    //todo
-                                    return _interpreter.InterpretArgument(JObject.Parse(content));
-                                    //return _interpreter.InterpretArgument(content);
-                                    //return instruction.TemplateReturn;
-                                }
+                                //    var response = await newModel.httpClient.SendAsync(request);
+                                //    string content = await response.Content.ReadAsStringAsync();
+                                //    //todo
+                                //    return _interpreter.InterpretArgument(JObject.Parse(content));
+                                //    //return _interpreter.InterpretArgument(content);
+                                //    //return instruction.TemplateReturn;
+                                //}
 
+
+                                var response = await newModel.httpClient.SendAsync(request);
+                                string content = await response.Content.ReadAsStringAsync();
+                                return Interpreter.InterpretArgument(JObject.Parse(content));
                             }
                             catch (Exception e)
                             {

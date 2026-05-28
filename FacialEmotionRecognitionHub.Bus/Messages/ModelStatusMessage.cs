@@ -6,8 +6,7 @@ using System.Threading.Tasks;
 
 namespace FacialEmotionRecognitionHub.Bus.Messages
 {
-    public class ConsoleOutputMessage(DateTime id)
+    public class ModelStatusMessage
     {
-        public DateTime ID { get; set; } = id;
     }
 }
