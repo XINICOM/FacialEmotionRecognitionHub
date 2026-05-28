@@ -116,7 +116,7 @@ namespace FacialEmotionRecognitionHub.Bus.Models
                 _templateParameters = new();
             if (_templateParameters.Any(x => x.Key != parameterName))
             {
-                Debug.WriteLine($"{parameterName} = {templateValue} ({templateValue.GetType()})");
+                //Debug.WriteLine($"{parameterName} = {templateValue} ({templateValue.GetType()})");
                 _templateParameters.Add(parameterName, templateValue);
             }
             else

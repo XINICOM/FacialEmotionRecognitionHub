@@ -29,7 +29,7 @@ namespace FacialEmotionRecognitionHub.Bus.Services
             Dictionary<string, object> result = new();
             if (source is not null)
             {
-                Debug.WriteLine(source.ToString());
+                //Debug.WriteLine(source.ToString());
                 foreach (var p in ((JObject)source).Properties())
                 {
                     string key = p.Name.ToString();

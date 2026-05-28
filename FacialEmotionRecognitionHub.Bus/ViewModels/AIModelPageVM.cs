@@ -71,7 +71,7 @@ namespace FacialEmotionRecognitionHub.Bus.ViewModels
                 {
                     var newPivotItemVM = new PivotItemVM(this, _interpreter);
                     var iName = instruction.InstructionName;
-                    Debug.WriteLine("===" + iName);
+                    //Debug.WriteLine("===" + iName);
                     if (iName.Contains("layer") || iName.Contains("resume") || iName.Contains("pause") || iName.Contains("terminate"))
                         continue;
                     newPivotItemVM.Initialize(iName, instruction);
@@ -123,11 +123,11 @@ namespace FacialEmotionRecognitionHub.Bus.ViewModels
             ChangedForView = !ChangedForView;
 
 
-            Debug.WriteLine($"ShowError = {ShowError}");
-            Debug.WriteLine($"ShowPaused = {ShowPaused}");
-            Debug.WriteLine($"IsIndeterminate = {IsIndeterminate}");
-            Debug.WriteLine($"Value = {Value}");
-            Debug.WriteLine($"Status = {Status}");
+            //Debug.WriteLine($"ShowError = {ShowError}");
+            //Debug.WriteLine($"ShowPaused = {ShowPaused}");
+            //Debug.WriteLine($"IsIndeterminate = {IsIndeterminate}");
+            //Debug.WriteLine($"Value = {Value}");
+            //Debug.WriteLine($"Status = {Status}");
         }
 
         [RelayCommand(CanExecute = nameof(CanPauseOrResume))]

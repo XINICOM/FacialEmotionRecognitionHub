@@ -72,7 +72,18 @@ namespace FacialEmotionRecognitionHub.Bus.Services
                             try
                             {
                                 //todo
-                                var request = new HttpRequestMessage(HttpMethod.Get, $"/{instruction.InstructionName}");
+
+                                var httpPath = $"/{instruction.InstructionName}";
+                                if(instruction.TemplateParameters is not null)
+                                {
+                                    httpPath += "/" + JsonConvert.SerializeObject(parameters);
+                                }
+
+
+
+                                var request = new HttpRequestMessage(HttpMethod.Get, httpPath);
+
+                                //todo
                                 if (instruction.determinate is not false)
                                 {
                                     Debug.WriteLine("==========START STREAM==========");
@@ -99,7 +110,7 @@ namespace FacialEmotionRecognitionHub.Bus.Services
                                             else
                                             {
                                                 //todo
-                                                Debug.WriteLine(line);
+                                                //Debug.WriteLine(line);
                                             }
                                         }
                                     }
@@ -136,98 +147,99 @@ namespace FacialEmotionRecognitionHub.Bus.Services
         }
         
 
-        //todo
-        public async void CreatNewAIModelInstruction()
-        {
-            Debug.WriteLine($"START");
-            string jsonSource =
-            @"{
-                ""before"": ""preprocessing"",
-                ""name"": ""train_stream"",
-                ""param"":{
-                    ""model_type"": ""CNN"",
-                    ""epochs"": 20,
-                    ""lr"": 0.001,
-                    ""weight_decay"": 1e-4,
-                    ""load_model_path"": ""path"",
-                    ""save_path"": ""Back_end/model_save/model_CNN.pth"",
-                    ""verbose"": true,
-                },
-                ""return"":{
-                    ""successful"": ""error"",
-                },
-                ""determinate"": {
-                    ""total_epoch"": 20,
-                    ""current_epoch"": 1,
-                    ""train_loss"": 0.7966,
-                    ""train_acc"": 0.7064,
-                    ""val_loss"": 1.1592,
-                    ""val_acc"": 0.5915,
-                }
-            }";
-            Debug.WriteLine($"SETTING");
-            var instruction = _interpreter.InstructionGenerator(jsonSource, async (invoker, parameters) =>
-            {
-                Debug.WriteLine($"INVOKER: {invoker.ToString()}");
-                Debug.WriteLine($"USER: {_interpreter}");
-                Debug.WriteLine($"PARAMETERS:");
-                foreach (var parameter in parameters)
-                {
-                    Debug.WriteLine($"{parameter.Key} = {parameter.Value}(TYPE: {parameter.Value.GetType()})");
-                }
-                var result =
-                @"{
-                        ""successful"": ""error"",
-                    }";
-                var r = _interpreter.InterpretArgument(JObject.Parse(result));
-                foreach (var rx in r)
-                {
-                    Debug.WriteLine($"{rx.Key} = {rx.Value} (TYPE: {rx.Value.GetType()})");
-                }
-                return r;
-            });
+        //
+        //public async void CreatNewAIModelInstruction()
+        //{
+        //    //Debug.WriteLine($"START");
+        //    string jsonSource =
+        //    @"{
+        //        ""before"": ""preprocessing"",
+        //        ""name"": ""train_stream"",
+        //        ""param"":{
+        //            ""model_type"": ""CNN"",
+        //            ""epochs"": 20,
+        //            ""lr"": 0.001,
+        //            ""weight_decay"": 1e-4,
+        //            ""load_model_path"": ""path"",
+        //            ""save_path"": ""Back_end/model_save/model_CNN.pth"",
+        //            ""verbose"": true,
+        //        },
+        //        ""return"":{
+        //            ""successful"": ""error"",
+        //        },
+        //        ""determinate"": {
+        //            ""total_epoch"": 20,
+        //            ""current_epoch"": 1,
+        //            ""train_loss"": 0.7966,
+        //            ""train_acc"": 0.7064,
+        //            ""val_loss"": 1.1592,
+        //            ""val_acc"": 0.5915,
+        //        }
+        //    }";
+        //    //Debug.WriteLine($"SETTING");
+        //    var instruction = _interpreter.InstructionGenerator(jsonSource, async (invoker, parameters) =>
+        //    {
+        //        //Debug.WriteLine($"INVOKER: {invoker.ToString()}");
+        //        //Debug.WriteLine($"USER: {_interpreter}");
+        //        //Debug.WriteLine($"PARAMETERS:");
+        //        //foreach (var parameter in parameters)
+        //        //{
+        //        //    Debug.WriteLine($"{parameter.Key} = {parameter.Value}(TYPE: {parameter.Value.GetType()})");
+        //        //}
+        //        var result =
+        //        @"{
+        //                ""successful"": ""error"",
+        //            }";
+        //        var r = _interpreter.InterpretArgument(JObject.Parse(result));
+        //        //foreach (var rx in r)
+        //        //{
+        //        //    Debug.WriteLine($"{rx.Key} = {rx.Value} (TYPE: {rx.Value.GetType()})");
+        //        //}
+        //        return r;
+        //    });
 
-            Debug.WriteLine($"Invoke");
-            ////var JsonInterpreterService = new JsonInterpreterService();
-            //var instruction = _interpreter.InstructionGenerator(jsonSource,  async (invoker, parameters) =>
-            //{
+        //    //Debug.WriteLine($"Invoke");
+        //    ////var JsonInterpreterService = new JsonInterpreterService();
+        //    //var instruction = _interpreter.InstructionGenerator(jsonSource,  async (invoker, parameters) =>
+        //    //{
 
-            //    Debug.WriteLine($"INVOKER: {invoker.ToString()}");
-            //    Debug.WriteLine($"USER: {_interpreter}");
-            //    Debug.WriteLine($"PARAMETERS:");
-            //    foreach (var parameter in parameters)
-            //    {
-            //        Debug.WriteLine($"{parameter.Key} = {parameter.Value}(TYPE: {parameter.Value.GetType()})");
-            //    }
-            //    var result =
-            //    @"{
-            //        ""successful"": ""error"",
-            //    }";
-            //    var r = _interpreter.InterpretArgument(JObject.Parse(result));
-            //    foreach(var rx in r)
-            //    {
-            //        Debug.WriteLine($"{rx.Key} = {rx.Value} (TYPE: {rx.Value.GetType()})");
-            //    }
-            //    return r;
-            //});
-            Dictionary<string, object> newDict = new()
-            {
-                //newDict["model_type"] = "newModelType";
-                { "epochs", 10 }
-            };
-            //await instruction.Execute();
-            try
-            {
+        //    //    Debug.WriteLine($"INVOKER: {invoker.ToString()}");
+        //    //    Debug.WriteLine($"USER: {_interpreter}");
+        //    //    Debug.WriteLine($"PARAMETERS:");
+        //    //    foreach (var parameter in parameters)
+        //    //    {
+        //    //        Debug.WriteLine($"{parameter.Key} = {parameter.Value}(TYPE: {parameter.Value.GetType()})");
+        //    //    }
+        //    //    var result =
+        //    //    @"{
+        //    //        ""successful"": ""error"",
+        //    //    }";
+        //    //    var r = _interpreter.InterpretArgument(JObject.Parse(result));
+        //    //    foreach(var rx in r)
+        //    //    {
+        //    //        Debug.WriteLine($"{rx.Key} = {rx.Value} (TYPE: {rx.Value.GetType()})");
+        //    //    }
+        //    //    return r;
+        //    //});
+        //    Dictionary<string, object> newDict = new()
+        //    {
+        //        //newDict["model_type"] = "newModelType";
+        //        { "epochs", 10 }
+        //    };
+        //    //await instruction.Execute();
+        //    try
+        //    {
 
-                //await instruction.Execute();
-                await instruction.Execute(this, newDict);
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex);
-                throw;
-            }
-        }
+        //        //await instruction.Execute();
+        //        await instruction.Execute(this, newDict);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        //todo
+        //        Debug.WriteLine(ex);
+        //        throw;
+        //    }
+        //}
 
         public void Dispose()
         {

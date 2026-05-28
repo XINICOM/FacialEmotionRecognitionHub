@@ -37,12 +37,6 @@ namespace FacialEmotionRecognitionHub.Bus.Models
             httpClient = new HttpClient();
             httpClient.BaseAddress = new Uri($"http://127.0.0.1:{Port}");
             httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
-
-            //Debug.WriteLine("EXE = " + dependenceEXEPath);
-            //Debug.WriteLine("PORT = " + port.ToString());
-            //Debug.WriteLine("CONFIG = " + modelConfigJson);
-            //Debug.WriteLine("NAME = " + name);
-
             try
             {
                 // 构建传入参数
@@ -74,7 +68,7 @@ namespace FacialEmotionRecognitionHub.Bus.Models
                 Process.BeginOutputReadLine();
                 Process.BeginErrorReadLine();
 
-                Debug.WriteLine($"模型服务已启动，端口: {port}");
+
                 //return true;
             }
             catch (Exception ex)
@@ -229,7 +223,7 @@ namespace FacialEmotionRecognitionHub.Bus.Models
 
         public void Dispose()
         {
-            Debug.WriteLine("===MODEL D");
+            //Debug.WriteLine("===MODEL D");
             StopProcess();
             GC.SuppressFinalize(this);
         }
@@ -269,6 +263,7 @@ namespace FacialEmotionRecognitionHub.Bus.Models
                 }
                 catch (Exception ex)
                 {
+                    //todo
                     Debug.WriteLine($"停止进程失败: {ex.Message}");
                 }
 
