@@ -84,6 +84,12 @@ namespace FacialEmotionRecognitionHub.Bus.Services
                 {
                     instruction.AddParameter(p.Key, p.Value);
                 }
+            var determinate = json["determinate"]?.ToString();
+
+            //Debug.WriteLine("D///////////");
+            if (determinate.ToLower().Contains("{"))
+                instruction.Determinate = true;
+
             //if (prama is not null)
             //{
             //    foreach (var p in prama.Properties())

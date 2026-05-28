@@ -48,6 +48,9 @@ namespace FacialEmotionRecognitionHub.Views
             _id = id;
             VM = App.Current.Services.GetService<AIModelPageVM>();
 
+            //if(VM != null )
+            //    VM.Console = "NEW";
+
             WeakReferenceMessenger.Default.Register<AIModelInitializedMessage>(this, (o, m) =>
             {
                 //Debug.WriteLine("TRY MODEL UPDATE");
@@ -61,6 +64,18 @@ namespace FacialEmotionRecognitionHub.Views
                 WeakReferenceMessenger.Default.Unregister<AIModelInitializedMessage>(this);
             });
 
+            WeakReferenceMessenger.Default.Register<ConsoleOutputMessage>(this, (o, m) =>
+            {
+                DispatcherQueue.TryEnqueue(() =>
+                {
+                    if(VM is not null)
+                    {
+                        VM.Console += m.Text;
+                        //Debug.WriteLine("CCCCCCCCCCCCCCCCCCC");
+                    }
+
+                });
+            });
             //Loaded += AIModelPage_Loaded;
 
             //__Pivot.SelectionChanged += (o, e) =>
@@ -69,6 +84,40 @@ namespace FacialEmotionRecognitionHub.Views
             //};
             
         }
+
+        //private void TerminalBlock_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)
+        //{
+        //    Debug.WriteLine("===============================change");
+
+        //}
+
+        private event Action TerminalBlockSizeChanged;
+
+        private void TerminalBlock_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            //Debug.WriteLine("===============================change");
+            TerminalBlockSizeChanged?.Invoke();
+            
+        }
+
+        private void ConsoleScrollViewer_Loaded(object sender, RoutedEventArgs e)
+        {
+            //Debug.WriteLine($"LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL");
+            TerminalBlockSizeChanged += () =>
+            {
+                //Debug.WriteLine($"TerminalBlockSizeChanged+=================");
+                if(sender is ScrollViewer scrollViewer)
+                {
+                    //Debug.WriteLine($"||||||||||||||||||||||||||||||||||");
+                    scrollViewer.ChangeView(null, scrollViewer.ScrollableHeight, null);
+                }
+            };
+        }
+
+        //private void ScrollViewer_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)
+        //{
+        //    Debug.WriteLine("===============================change");
+        //}
 
         //private void AIModelPage_Loaded(object sender, RoutedEventArgs e)
         //{

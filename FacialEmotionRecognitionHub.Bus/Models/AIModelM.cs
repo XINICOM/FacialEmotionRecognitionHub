@@ -7,7 +7,9 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.Messaging;
 using FacialEmotionRecognitionHub.Bus.Services;
+using FacialEmotionRecognitionHub.Bus.ViewModels;
 
 namespace FacialEmotionRecognitionHub.Bus.Models
 {
@@ -22,10 +24,40 @@ namespace FacialEmotionRecognitionHub.Bus.Models
 
     public class AIModelM : IDisposable
     {
-        private Process Process;
+        public Process Process;
+
+        private string _console = string.Empty;
+
+        public string Console
+        {
+            get
+            {
+                return _console;
+            }
+            set
+            {
+                if(_console != value)
+                {
+                    _console = value;
+                    if(value != string.Empty)
+                    {
+                        OnConsoleChanged?.Invoke();
+                    }
+                }
+            }
+        }
+        public event Action OnConsoleChanged;
 
         public AIModelM(DateTime id, string dependenceEXEPath, int port, string modelConfigJson, string name)
         {
+            //todo
+            OnConsoleChanged += () =>
+            {
+                Debug.Write(Console);
+                Console = string.Empty;
+            };
+
+
             ModelConfigJson = modelConfigJson;
             DependenceEXEPath = dependenceEXEPath;
             Port = port;
@@ -60,10 +92,27 @@ namespace FacialEmotionRecognitionHub.Bus.Models
                 Process.OutputDataReceived += Process_OutputDataReceived;
                 Process.ErrorDataReceived += Process_ErrorDataReceived;
 
+                //Process.OutputDataReceived += (s, e) =>
+                //{
+                //    if (!string.IsNullOrEmpty(e.Data))
+                //    {
+                //        //Console += "[RECEIVED]" + e.Data + "\n";
+                //        //todo
+                //        //WeakReferenceMessenger.Default.Send(new ConsoleOutputMessage
+                //        //{
+                //        //    Text = "[RECEIVED]" + e.Data + "\n"
+                //        //});
+
+
+                //        //Console += "[RECEIVED]" + e.Data + "\n";
+                //    }
+                //};
+
                 // 进程退出事件
                 Process.Exited += Process_Exited;
                 Process.EnableRaisingEvents = true;
 
+                //todo
                 Process.Start();
                 Process.BeginOutputReadLine();
                 Process.BeginErrorReadLine();
@@ -98,7 +147,19 @@ namespace FacialEmotionRecognitionHub.Bus.Models
         {
             if (!string.IsNullOrEmpty(e.Data))
             {
-                Debug.WriteLine($">>>[输出] {e.Data}");
+
+                //Console += "[RECEIVED]" + e.Data + "\n";
+                //todo
+                WeakReferenceMessenger.Default.Send(new ConsoleOutputMessage
+                {
+                    Text = "[RECEIVED]" + e.Data + "\n"
+                });
+
+
+                Console += "[RECEIVED]" + e.Data + "\n";
+                
+
+                //Debug.WriteLine($">>>[输出] {e.Data}");
                 // 或者更新 UI
             }
             //throw new NotImplementedException();

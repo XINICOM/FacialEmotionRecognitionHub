@@ -32,7 +32,7 @@ namespace FacialEmotionRecognitionHub.Bus.Models
         //private bool _executable;
         private Command command = command;
 
-        public bool determinate = false;
+        public bool Determinate = false;
 
         //public bool ExecutabilityUpdate(Func<ModifiableInstruction, bool>? predicate = null)
         //{

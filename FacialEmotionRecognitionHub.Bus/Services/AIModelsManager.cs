@@ -84,7 +84,7 @@ namespace FacialEmotionRecognitionHub.Bus.Services
                                 var request = new HttpRequestMessage(HttpMethod.Get, httpPath);
 
                                 //todo
-                                if (instruction.determinate is not false)
+                                if (instruction.Determinate)
                                 {
                                     Debug.WriteLine("==========START STREAM==========");
                                     request.Headers.Add("Accept", "text/event-stream");
@@ -118,6 +118,8 @@ namespace FacialEmotionRecognitionHub.Bus.Services
                                 }
                                 else
                                 {
+                                    Debug.WriteLine("==========DEFAULT==========");
+
                                     var response = await newModel.httpClient.SendAsync(request);
                                     string content = await response.Content.ReadAsStringAsync();
                                     //todo

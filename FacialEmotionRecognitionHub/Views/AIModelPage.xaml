@@ -173,14 +173,19 @@
                                FontFamily="Consolas"
                                FontSize="12"
                                Margin="0,0,0,8" />
-                    <ScrollViewer Grid.Row="1"
-                                  VerticalScrollBarVisibility="Auto">
+                    <ScrollViewer x:Name="ConsoleScrollViewer"
+                                  Grid.Row="1"
+                                  VerticalScrollBarVisibility="Auto"
+                                  HorizontalScrollBarVisibility="Auto"
+                                  Loaded="ConsoleScrollViewer_Loaded">
                         <TextBlock x:Name="TerminalBlock"
                                    Text="{x:Bind PageVM.Console, Mode=OneWay}"
                                    Foreground="White"
                                    FontFamily="Consolas"
                                    FontSize="13"
-                                   LineHeight="20" /><!--Text="[INFO] Terminal initialized. Waiting for train() execution...&#x0a;[IDLE] Ready.&#x0a;>>>TEST OUTPUT."-->
+                                   LineHeight="20"
+                                   SizeChanged="TerminalBlock_SizeChanged"/>
+                        <!--Text="[INFO] Terminal initialized. Waiting for train() execution...&#x0a;[IDLE] Ready.&#x0a;>>>TEST OUTPUT."-->
                     </ScrollViewer>
                     <!--</Grid>-->
                 </Grid>

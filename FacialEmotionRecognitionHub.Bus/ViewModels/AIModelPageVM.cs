@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using FacialEmotionRecognitionHub.Bus.Models;
 using FacialEmotionRecognitionHub.Bus.Services;
 using Microsoft.UI.Xaml.Controls;
@@ -14,10 +15,16 @@ using WinRT;
 
 namespace FacialEmotionRecognitionHub.Bus.ViewModels
 {
+    //todo
+    public class ConsoleOutputMessage
+    {
+        public string Text { get; set; }
+    }
+
     public partial class AIModelPageVM : ObservableObject
     {
         [ObservableProperty]
-        private string _console = "[INFO] Terminal initialized. Waiting for execution...;\n[IDLE] Ready.;\n>>>TEST OUTPUT.\n";
+        private string _console = string.Empty;
 
         [ObservableProperty]
         private bool _showError = false;
@@ -54,7 +61,23 @@ namespace FacialEmotionRecognitionHub.Bus.ViewModels
             _pivotItemVMs = [];
             _modelName = "Default Model Name";
             _interpreter = interpreter;
+
+            //todo
+            //WeakReferenceMessenger.Default.Register<ConsoleOutputMessage>(this, (r, m) =>
+            //{
+            //    Console += m.Text;
+            //});
         }
+
+        //private void UpdateConsole()
+        //{
+        //    if (model.Console != string.Empty)
+        //    {
+        //        Console += model.Console;
+        //        model.Console = string.Empty;
+
+        //    }
+        //}
 
         public void SetAIModelM(AIModelM model)
         {
@@ -79,7 +102,40 @@ namespace FacialEmotionRecognitionHub.Bus.ViewModels
                 }
             }
 
+            //model.OnConsoleChanged += () =>
+            //{
+                
+            //    //Console += model.Console;
+            //    //model.Console = string.Empty;
+            //    UpdateConsole();
+            //};
+
+            //model.Process.OutputDataReceived += (s, e) =>
+            //{
+            //    if (!string.IsNullOrEmpty(e.Data))
+            //    {
+            //        //Console += "[RECEIVED]" + e.Data + "\n";
+            //        WeakReferenceMessenger.Default.Send(new ConsoleOutputMessage
+            //        {
+            //            Text = "[RECEIVED]" + e.Data + "\n"
+            //        });
+            //    }
+            //};
+
+            //model.Process.ErrorDataReceived += (s, e) =>
+            //{
+            //    if (!string.IsNullOrEmpty(e.Data))
+            //    {
+            //        Console += "[GETERROR]" + e.Data + "\n";
+            //    }
+            //};
+
+            //model.Process.Start();
+            //model.Process.BeginOutputReadLine();
+            //model.Process.BeginErrorReadLine();
+
             UpdateModelStatus();
+            //UpdateConsole();
         }
 
         private void UpdateModelStatus()
@@ -170,6 +226,8 @@ namespace FacialEmotionRecognitionHub.Bus.ViewModels
                         model.SetModelStatus(ModelStatus.Error);
                 }
                 UpdateModelStatus();
+
+                //UpdateConsole();
             }
         }
         private bool CanPauseOrResume()
@@ -220,6 +278,8 @@ namespace FacialEmotionRecognitionHub.Bus.ViewModels
                         model.SetModelStatus(ModelStatus.Error);
                 }
                 UpdateModelStatus();
+
+                //UpdateConsole();
             }
         }
         private bool CanTerminate()
@@ -240,7 +300,20 @@ namespace FacialEmotionRecognitionHub.Bus.ViewModels
             var i = model.GetInstruction(iName);
             if (i is not null)
             {
-                Console = Console + iName + "\n";
+                Console += iName + "\n";
+                if (i.Determinate)
+                {
+                    model.SetModelStatus(ModelStatus.DeterminatedProcessing);
+                    UpdateModelStatus();
+
+                }
+                else if (!i.Determinate)
+                {
+                    model.SetModelStatus(ModelStatus.IndeterminatedProcessing);
+                    UpdateModelStatus();
+
+                }
+
                 var result = await i.Execute(i, param);
                 if(result is not null)
                 {
@@ -252,6 +325,8 @@ namespace FacialEmotionRecognitionHub.Bus.ViewModels
                     result.TryGetValue("successful", out object value);
                     if (value is not null && value.ToString() == "0")
                     {
+                        PromptShowed = "Pause";
+
                         model.SetModelStatus(ModelStatus.Relax);
                     }
                     else
@@ -260,6 +335,8 @@ namespace FacialEmotionRecognitionHub.Bus.ViewModels
                     }
                 }
                 UpdateModelStatus();
+
+                //UpdateConsole() ;
             }
         }
     }
