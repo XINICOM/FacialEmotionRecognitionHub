@@ -1,4 +1,21 @@
-﻿using System;
+﻿/*
+ * This file is part of FacialEmotionRecognitionHub.
+ * Copyright (C) 2026 周诣成（Yicheng Zhou）XINICOM@outlook.com
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -23,7 +40,7 @@ namespace FacialEmotionRecognitionHub.Bus.Models
         public bool needReturnJSON = false;
         private AIModelsManager _aIModelsManager;
         public Process Process;
-        private string _console = string.Empty;
+        private string _console = "FacialEmotionRecognitionHub  Copyright (C) 2026 周诣成（Yicheng Zhou）XINICOM@outlook.com\r\n\r\nFacialEmotionRecognition     Copyright (C) 2026 周诣成（Yicheng Zhou）XINICOM@outlook.com\r\n                             Copyright (C) 2026 刘皓成（Haocheng Liu）\r\n                             Copyright (C) 2026 李健旭（Jianxu Li）\r\n                             Copyright (C) 2026 叶晨霖（Chenlin Ye）\r\n                             Copyright (C) 2026 王泓铭（Hongming Wang）\r\nThis program comes with ABSOLUTELY NO WARRANTY.\r\nThis is free software, and you are welcome to redistribute it\r\nunder certain conditions; type 'show c' for details.\r\n\r\n";
         public string Console
         {
             get
