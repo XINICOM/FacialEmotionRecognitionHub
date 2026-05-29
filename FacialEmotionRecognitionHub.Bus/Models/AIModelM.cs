@@ -180,12 +180,14 @@ namespace FacialEmotionRecognitionHub.Bus.Models
                         float t = 0f, c = 0f;
                         foreach (var item in returns)
                         {
-                            if (item.Key.ToLower().Contains("total"))
+                            if (item.Key.Contains("total", StringComparison.CurrentCultureIgnoreCase))
                                 t = Convert.ToSingle(item.Value);
                             //t = (float)item.Value;
-                            if (item.Key.ToLower().Contains("current"))
+                            if (item.Key.Contains("current", StringComparison.CurrentCultureIgnoreCase))
                                 c = Convert.ToSingle(item.Value);
                             //c = (float)item.Value;
+                            if (item.Key.Contains("val", StringComparison.CurrentCultureIgnoreCase) && item.Key.Contains("acc", StringComparison.CurrentCultureIgnoreCase))
+                                _accuracy = (Convert.ToSingle(item.Value) * 100).ToString("F1") + " %";
                         }
                         SetModelStatus(ModelStatus.DeterminatedProcessing, t != 0 ? c / t * 100 : 0);
                         //WeakReferenceMessenger.Default.Send(new ModelStatusMessage());
@@ -218,11 +220,13 @@ namespace FacialEmotionRecognitionHub.Bus.Models
         public bool IsIndeterminate { get { return _isIndeterminate; } }
         private string _status = "No Progress";
         public string Status { get { return _status; } }
+        private string _accuracy = "--.-%";
+        public string Accuracy { get { return _accuracy; } }
 
         //private ModelStatus _status;
         public ModelStatus modelStatus = ModelStatus.Relax;
         private float _value = 0f;
-        public float Value {  get { return _value; } }
+        public float Value { get { return _value; } }
         private DateTime _id;
         public DateTime ID { get { return _id; } }
 

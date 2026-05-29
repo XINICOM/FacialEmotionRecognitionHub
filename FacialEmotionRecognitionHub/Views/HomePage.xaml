@@ -61,9 +61,8 @@
                             <TextBlock Text="Validation Accuracy"
                                        Style="{StaticResource CaptionTextBlockStyle}"
                                        Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" />
-                            <TextBlock Text="87.5%"
-                                       Style="{StaticResource DisplayTextBlockStyle}"
-                                       Foreground="Green" />
+                            <TextBlock Text="{x:Bind Accuracy}"
+                                       Style="{StaticResource DisplayTextBlockStyle}"/>
                             <!--</StackPanel>-->
                             <!--<StackPanel>
                                 <TextBlock Text="Inference Latency (Per Frame)"
