@@ -2,34 +2,18 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using CommunityToolkit.Mvvm.Messaging;
-using FacialEmotionRecognitionHub.Bus.Messages;
 using FacialEmotionRecognitionHub.Bus.Models;
 using FacialEmotionRecognitionHub.Bus.Services;
-using Microsoft.UI.Xaml.Controls;
-using Newtonsoft.Json.Linq;
-using WinRT;
-
 namespace FacialEmotionRecognitionHub.Bus.ViewModels
 {
-    //todo
-    //public class ConsoleOutputMessage
-    //{
-    //    public string Text { get; set; }
-    //}
-
     public partial class AIModelPageVM : ObservableObject
     {
         private nint _windowNint;
-
         [ObservableProperty]
         private string _console = string.Empty;
-
         [ObservableProperty]
         private bool _showError = false;
         [ObservableProperty]
@@ -41,163 +25,61 @@ namespace FacialEmotionRecognitionHub.Bus.ViewModels
         [ObservableProperty]
         private string _status = string.Empty;
         private string _instructionNameInvokingNow = string.Empty;
-
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(PauseOrResumeCommand))]
         [NotifyCanExecuteChangedFor(nameof(TerminateCommand))]
         private bool _changedForView = false;
         [ObservableProperty]
         private string _promptShowed = "Pause";
-
-        //todo
-        //private ObservableCollection<PivotItem>
         [ObservableProperty]
         private ObservableCollection<PivotItemVM> _pivotItemVMs;
-
         private AIModelM model;
         private IInterpreter _interpreter;
         private IOService _ioService;
-
         [ObservableProperty]
         private string _modelName;
-
-        //private bool needReturnJSON = false;
-
         public AIModelPageVM(IInterpreter interpreter, IOService iOService)
         {
             _pivotItemVMs = [];
             _modelName = "Default Model Name";
             _interpreter = interpreter;
             _ioService = iOService;
-
-            //todo
-            //WeakReferenceMessenger.Default.Register<ConsoleOutputMessage>(this, (r, m) =>
-            //{
-            //    Console += m.Text;
-            //});
-            //WeakReferenceMessenger.Default.Register<ModelStatusMessage>(this, (r, m) =>
-            //{
-            //    UpdateModelStatus();
-            //});
         }
-
         public void GivePageCite(nint n)
         {
             _windowNint = n;
         }
-
         public void UpdateConsole()
         {
             if (model.Console != string.Empty)
             {
                 Console += model.Console;
                 UpdateModelStatus();
-                //var result = string.Empty;
-                //if (model.Console.StartsWith("[RECEIVED]"))
-                //{
-                //    result = model.Console.Substring("[RECEIVED]".Length);
-                //    if (result[0] == '\uFEFF')
-                //    {
-                //        Debug.WriteLine("TRUE");
-                //        result = result.Substring(1);
-                //    }
-                //}
-
-                //Debug.WriteLine(">>>>>>>>>>>>"+result);
-
-                //if (needReturnJSON)
-                //{
-                //    try
-                //    {
-                //        var json = JObject.Parse(result);
-                //        var returns = _interpreter.InterpretArgument(json);
-                //        float t = 0f, c = 0f;
-                //        foreach(var item in returns)
-                //        {
-                //            if (item.Key.ToLower().Contains("total"))
-                //                t = Convert.ToSingle(item.Value);
-                //            //t = (float)item.Value;
-                //            if (item.Key.ToLower().Contains("current"))
-                //                c = Convert.ToSingle(item.Value);
-                //                //c = (float)item.Value;
-                //        }
-                //        model.SetModelStatus(ModelStatus.DeterminatedProcessing, t != 0 ? c / t * 100 : 0);
-                //        UpdateModelStatus();
-                //    }
-                //    catch
-                //    {
-                //        Debug.WriteLine("NO JSON");
-                //        //throw;
-                //    }
-                //}
                 model.Console = string.Empty;
             }
         }
-
         public void SetAIModelM(AIModelM model)
         {
-            //Debug.WriteLine(this.model is null);
             if (this.model is null)
             {
-                //Debug.WriteLine("LOAD MODEL");
                 this.model = model;
                 ModelName = model.Name;
-
-                //todo
                 PivotItemVMs.Clear();
                 foreach (var instruction in model.ModifiableInstructionSet)
                 {
                     var newPivotItemVM = new PivotItemVM(this, _interpreter, _ioService, _windowNint);
                     var iName = instruction.InstructionName;
-                    //Debug.WriteLine("===" + iName);
                     if (iName.Contains("layer") || iName.Contains("resume") || iName.Contains("pause") || iName.Contains("terminate"))
                         continue;
                     newPivotItemVM.Initialize(iName, instruction);
                     PivotItemVMs.Add(newPivotItemVM);
                 }
             }
-
-            //model.OnConsoleChanged += () =>
-            //{
-                
-            //    //Console += model.Console;
-            //    //model.Console = string.Empty;
-            //    UpdateConsole();
-            //};
-
-            //model.Process.OutputDataReceived += (s, e) =>
-            //{
-            //    if (!string.IsNullOrEmpty(e.Data))
-            //    {
-            //        //Console += "[RECEIVED]" + e.Data + "\n";
-            //        WeakReferenceMessenger.Default.Send(new ConsoleOutputMessage
-            //        {
-            //            Text = "[RECEIVED]" + e.Data + "\n"
-            //        });
-            //    }
-            //};
-
-            //model.Process.ErrorDataReceived += (s, e) =>
-            //{
-            //    if (!string.IsNullOrEmpty(e.Data))
-            //    {
-            //        Console += "[GETERROR]" + e.Data + "\n";
-            //    }
-            //};
-
-            //model.Process.Start();
-            //model.Process.BeginOutputReadLine();
-            //model.Process.BeginErrorReadLine();
-
             UpdateModelStatus();
-            //UpdateConsole();
         }
-
         private void UpdateModelStatus()
         {
-            //Debug.WriteLine($">>>>>>>>>>{model.ShowPaused}");
             var s = model.modelStatus;
-
             ShowError = model.ShowError;
             ShowPaused = model.ShowPaused;
             IsIndeterminate = model.IsIndeterminate;
@@ -207,7 +89,6 @@ namespace FacialEmotionRecognitionHub.Bus.ViewModels
                 case ModelStatus.Relax:
                 {
                     Status = "Relax";
-                    //Changed = !Changed;
                     break;
                 }
                 case ModelStatus.DeterminatedProcessing:
@@ -232,26 +113,15 @@ namespace FacialEmotionRecognitionHub.Bus.ViewModels
                 }
             }
             ChangedForView = !ChangedForView;
-
-
-            //Debug.WriteLine($"ShowError = {ShowError}");
-            //Debug.WriteLine($"ShowPaused = {ShowPaused}");
-            //Debug.WriteLine($"IsIndeterminate = {IsIndeterminate}");
-            //Debug.WriteLine($"Value = {Value}");
-            //Debug.WriteLine($"Status = {Status}");
         }
-
         [RelayCommand(CanExecute = nameof(CanPauseOrResume))]
         private async Task PauseOrResume()
         {
-            //todo
             Debug.WriteLine($"===> I {PromptShowed}");
             var i = model.GetInstruction(PromptShowed.ToLower());
-
             if (i is not null)
             {
                 Console = Console + PromptShowed.ToLower() + "\n";
-                //Debug.WriteLine($"{PromptShowed}");
                 var result = await i.Execute(i, null);
                 if (result is not null)
                 {
@@ -259,30 +129,21 @@ namespace FacialEmotionRecognitionHub.Bus.ViewModels
                     {
                         Console += $">>>{item.Key} -> {item.Value} ({item.Value.GetType()})\n";
                     }
-
                     result.TryGetValue("successful", out object value);
                     if (value is not null && value.ToString() == "0")
                     {
                         if (PromptShowed == "Pause")
                         {
-                            Debug.WriteLine("//////PAUSE");
                             model.SetModelStatus(ModelStatus.Pause);
-                            //ShowPaused = true;
-
                         }
                         else
                             model.SetModelStatus(ModelStatus.IndeterminatedProcessing);
-
                         PromptShowed = PromptShowed == "Pause" ? "Resume" : "Pause";
-                        //Debug.WriteLine($"successful");
-
                     }
                     else
                         model.SetModelStatus(ModelStatus.Error);
                 }
                 UpdateModelStatus();
-
-                //UpdateConsole();
             }
         }
         private bool CanPauseOrResume()
@@ -300,17 +161,13 @@ namespace FacialEmotionRecognitionHub.Bus.ViewModels
             else
                 return false;
         }
-
         [RelayCommand(CanExecute = nameof(CanTerminate))]
         private async Task TerminateAsync()
         {
-            //todo
             Debug.WriteLine("===> I Terminate");
             var i = model.GetInstruction("terminate");
-
             if (i is not null)
             {
-                //Debug.WriteLine($"{PromptShowed}");
                 Console = Console + "terminate\n";
                 var result = await i.Execute(i, null);
                 if (result is not null)
@@ -319,22 +176,16 @@ namespace FacialEmotionRecognitionHub.Bus.ViewModels
                     {
                         Console += $">>>{item.Key} -> {item.Value} ({item.Value.GetType()})\n";
                     }
-
                     result.TryGetValue("successful", out object value);
                     if (value is not null && value.ToString() == "0")
                     {
-                        //PromptShowed = PromptShowed == "Pause" ? "Resume" : "Pause";
-                        //Debug.WriteLine($"successful");
                         PromptShowed = "Pause";
                         model.SetModelStatus(ModelStatus.Relax);
-
                     }
                     else
                         model.SetModelStatus(ModelStatus.Error);
                 }
                 UpdateModelStatus();
-
-                //UpdateConsole();
             }
         }
         private bool CanTerminate()
@@ -346,12 +197,9 @@ namespace FacialEmotionRecognitionHub.Bus.ViewModels
             else
                 return false;
         }
-
         public async Task ExecuteInstruction(string iName, Dictionary<string, object> param)
         {
             Debug.WriteLine($"===> I {iName}");
-
-
             var i = model.GetInstruction(iName);
             if (i is not null)
             {
@@ -368,20 +216,17 @@ namespace FacialEmotionRecognitionHub.Bus.ViewModels
                     model.SetModelStatus(ModelStatus.IndeterminatedProcessing);
                     UpdateModelStatus();
                 }
-
                 var result = await i.Execute(i, param);
-                if(result is not null)
+                if (result is not null)
                 {
                     foreach (var item in result)
                     {
                         Console += $">>>{item.Key} -> {item.Value} ({item.Value.GetType()})\n";
                     }
-
                     result.TryGetValue("successful", out object value);
                     if (value is not null && value.ToString() == "0")
                     {
                         PromptShowed = "Pause";
-
                         model.SetModelStatus(ModelStatus.Relax);
                     }
                     else
@@ -392,8 +237,6 @@ namespace FacialEmotionRecognitionHub.Bus.ViewModels
                     _instructionNameInvokingNow = string.Empty;
                 }
                 UpdateModelStatus();
-
-                //UpdateConsole() ;
             }
         }
     }
