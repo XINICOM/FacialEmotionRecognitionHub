@@ -254,7 +254,6 @@ namespace FacialEmotionRecognitionHub.Bus.Models
 
         public void SetModelStatus(ModelStatus target, float progress = 0f)
         {
-            WeakReferenceMessenger.Default.Send(new ModelStatusMessage());
 
             if (target == ModelStatus.Error)
             {
@@ -296,6 +295,8 @@ namespace FacialEmotionRecognitionHub.Bus.Models
                 _value = 0f;
             }
             modelStatus = target;
+
+            WeakReferenceMessenger.Default.Send(new ModelStatusMessage());
         }
 
 

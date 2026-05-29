@@ -46,24 +46,24 @@
                                    Foreground="Gray"
                                    HorizontalAlignment="Center"
                                    Margin="0,2,0,12" />
-                        
+
                         <ProgressBar Grid.Row="2"
                                      Value="{x:Bind Value}"
                                      IsIndeterminate="{x:Bind IsIndeterminate}"
                                      ShowError="{x:Bind ShowError}"
                                      ShowPaused="{x:Bind ShowPaused}"
                                      Background="LightGray" />
-                        
+
                         <StackPanel Grid.Row="3"
                                     Margin="0,12,0,0"
                                     Spacing="16">
                             <!--<StackPanel>-->
-                                <TextBlock Text="Validation Accuracy"
-                                           Style="{StaticResource CaptionTextBlockStyle}"
-                                           Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" />
-                                <TextBlock Text="87.5%"
-                                           Style="{StaticResource DisplayTextBlockStyle}"
-                                           Foreground="Green" />
+                            <TextBlock Text="Validation Accuracy"
+                                       Style="{StaticResource CaptionTextBlockStyle}"
+                                       Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" />
+                            <TextBlock Text="87.5%"
+                                       Style="{StaticResource DisplayTextBlockStyle}"
+                                       Foreground="Green" />
                             <!--</StackPanel>-->
                             <!--<StackPanel>
                                 <TextBlock Text="Inference Latency (Per Frame)"
@@ -113,12 +113,11 @@
             </ItemContainer>
         </DataTemplate>
     </Page.Resources>
-    
+
     <ItemsView Margin="4,4,4,4"
                ItemTemplate="{StaticResource DashboardItemTmplate}"
-               ItemsSource="{x:Bind VM.AIModelMs}"
-               SelectionMode="None"
-               IsItemInvokedEnabled="True"><!--ItemInvoked="ItemsView_ItemInvoked"-->
+               ItemsSource="{x:Bind VM.AIModelMs}">
+        <!--SelectionMode="None"IsItemInvokedEnabled="True"ItemInvoked="ItemsView_ItemInvoked"-->
         <ItemsView.Layout>
             <UniformGridLayout MinItemWidth="300"
                                MinColumnSpacing="16"
@@ -187,15 +186,19 @@
                     </Grid>
                 </Border>
 
-                --><!-- MODEL COMPETITOR CARD 2 --><!--
+                -->
+    <!-- MODEL COMPETITOR CARD 2 -->
+    <!--
                 <Border Width="300"
                         Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
                         BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
                         BorderThickness="2"
                         CornerRadius="8"
                         Padding="16">
-                    --><!--BorderBrush="{ThemeResource SystemControlHighlightAccentBrush}"-->
-                    <!-- Highlighted border implies this model performs best --><!--
+                    -->
+    <!--BorderBrush="{ThemeResource SystemControlHighlightAccentBrush}"-->
+    <!-- Highlighted border implies this model performs best -->
+    <!--
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
@@ -225,7 +228,9 @@
                                    Foreground="Green"
                                    HorizontalAlignment="Center"
                                    Margin="0,2,0,12" />
-                        --><!--<MenuFlyoutSeparator Grid.Row="2" />--><!--
+                        -->
+    <!--<MenuFlyoutSeparator Grid.Row="2" />-->
+    <!--
                         <ProgressBar Grid.Row="2"
                                      Value="100"
                                      IsIndeterminate="True"
@@ -233,7 +238,9 @@
                                      ShowPaused="False"
                                      Background="LightGray" />
 
-                        --><!-- Benchmark Metrics Grid --><!--
+                        -->
+    <!-- Benchmark Metrics Grid -->
+    <!--
                         <StackPanel Grid.Row="3"
                                     Margin="0,12,0,0"
                                     Spacing="16">

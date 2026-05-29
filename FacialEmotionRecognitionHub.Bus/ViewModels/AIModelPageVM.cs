@@ -356,6 +356,7 @@ namespace FacialEmotionRecognitionHub.Bus.ViewModels
             if (i is not null)
             {
                 Console += iName + "\n";
+                _instructionNameInvokingNow = iName;
                 if (i.Determinate)
                 {
                     model.needReturnJSON = true;
@@ -388,6 +389,7 @@ namespace FacialEmotionRecognitionHub.Bus.ViewModels
                         model.SetModelStatus(ModelStatus.Error);
                     }
                     model.needReturnJSON = false;
+                    _instructionNameInvokingNow = string.Empty;
                 }
                 UpdateModelStatus();
 
