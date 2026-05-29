@@ -52,7 +52,8 @@ namespace FacialEmotionRecognitionHub
             //Debug.WriteLine("a");
             //sender.TabItems.Remove(args.Tab);
             if (VM is not null)
-                VM.CloseTabViewItemCommand.Execute(args.Tab);
+                VM.CloseTabViewItem(args.Tab);
+                //VM.CloseTabViewItemCommand.Execute(args.Tab);
         }
 
         private async void MainTabView_AddTabButtonClickAsync(TabView sender, object args)
@@ -62,8 +63,9 @@ namespace FacialEmotionRecognitionHub
             if (VM is not null)
             {
                 var id = DateTime.Now;
+                var wh = WinRT.Interop.WindowNative.GetWindowHandle(this);
 
-                await VM.AddTabViewItem(WinRT.Interop.WindowNative.GetWindowHandle(this), new AIModelPage(id, WinRT.Interop.WindowNative.GetWindowHandle(this)), id);
+                await VM.AddTabViewItem(wh, new AIModelPage(id, wh), id);
                 
                 //VM.a();
             }

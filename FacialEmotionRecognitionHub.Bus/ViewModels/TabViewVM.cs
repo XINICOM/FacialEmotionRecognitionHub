@@ -39,7 +39,7 @@ namespace FacialEmotionRecognitionHub.Bus.ViewModels
         private AIModelsManager aIModelsManager;
         private IOService iOService;
 
-        public TabViewVM(AIModelsManager aIModelsManager,IOService iOService, object homePage)
+        public TabViewVM(AIModelsManager aIModelsManager,IOService iOService, Page homePage)
         {
             //tabViewM = new TabViewM(aIModelsManager);
             this.aIModelsManager = aIModelsManager;
@@ -55,7 +55,7 @@ namespace FacialEmotionRecognitionHub.Bus.ViewModels
         //    Debug.WriteLine("TabViewItems_CollectionChanged");
         //}
 
-        private void InitializeTabViewItems(object homePage)
+        private void InitializeTabViewItems(Page homePage)
         {
             //TabViewItems.Clear();
             var homeTab = new TabViewItem
@@ -87,7 +87,7 @@ namespace FacialEmotionRecognitionHub.Bus.ViewModels
         }
 
         //todo
-        public async Task AddTabViewItem(nint sender, object page, DateTime id)
+        public async Task AddTabViewItem(nint sender, Page page, DateTime id)
         {
             var exeFile = await iOService.OpenFileClick(sender, [".exe"]);
             if (exeFile is null)
@@ -129,14 +129,36 @@ namespace FacialEmotionRecognitionHub.Bus.ViewModels
             SelectedTabViewItem = newTab;
         }
 
-        [RelayCommand]
-        private void CloseTabViewItem(TabViewItem tvi)
+        //[RelayCommand]
+        public void CloseTabViewItem(TabViewItem tvi)
         {
             if (tvi is null || tvi.IsClosable == false)
                 return;
 
+
+            //if (tvi.Content is Page page)
+            //{
+
+            //}
+            //DateTime id;
+            if(tvi.Tag is DateTime id)
+            {
+
+                aIModelsManager.DisposeModel(id);
+            }
+
+
+
+
+
             //var index = TabViewItems.IndexOf(tvi);
-            //TabViewItems.Remove(tvi);
+            TabViewItems.Remove(tvi);
+
+
+
+
+
+
             //if (SelectedTabViewItem == tvi)
             //{
             //    if (TabViewItems.Count > 0)

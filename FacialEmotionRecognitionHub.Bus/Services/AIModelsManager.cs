@@ -257,5 +257,22 @@ namespace FacialEmotionRecognitionHub.Bus.Services
                 model.Dispose();
             }
         }
+
+        public void DisposeModel(DateTime id)
+        {
+            if (RunningAIModels.Any(x => x.ID == id))
+            {
+                var index = RunningAIModels.FindIndex(x => x.ID == id);
+                //if (index is null)
+                //    return;
+                var target = RunningAIModels[index];
+                RunningAIModels.Remove(target);
+                target.Dispose();
+
+            }
+
+            
+            
+        }
     }
 }
