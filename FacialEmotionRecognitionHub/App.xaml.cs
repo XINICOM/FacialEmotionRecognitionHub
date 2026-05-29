@@ -1,9 +1,9 @@
 ﻿using System;
 using FacialEmotionRecognitionHub.Bus.Services;
 using FacialEmotionRecognitionHub.Bus.ViewModels;
+using FacialEmotionRecognitionHub.Views;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
-using FacialEmotionRecognitionHub.Views;
 namespace FacialEmotionRecognitionHub
 {
     public partial class App : Application
