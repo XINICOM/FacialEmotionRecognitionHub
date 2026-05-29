@@ -1,18 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Dynamic;
-using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
-using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Messaging;
 using FacialEmotionRecognitionHub.Bus.Messages;
 using FacialEmotionRecognitionHub.Bus.Services;
-using FacialEmotionRecognitionHub.Bus.ViewModels;
 using Newtonsoft.Json.Linq;
-
 namespace FacialEmotionRecognitionHub.Bus.Models
 {
     public enum ModelStatus
@@ -23,15 +18,12 @@ namespace FacialEmotionRecognitionHub.Bus.Models
         Pause,
         Relax,
     }
-
     public class AIModelM : IDisposable
     {
         public bool needReturnJSON = false;
         private AIModelsManager _aIModelsManager;
         public Process Process;
-
         private string _console = string.Empty;
-
         public string Console
         {
             get
@@ -40,46 +32,32 @@ namespace FacialEmotionRecognitionHub.Bus.Models
             }
             set
             {
-                if(_console != value)
+                if (_console != value)
                 {
                     _console = value;
-                    if(value != string.Empty)
+                    if (value != string.Empty)
                     {
                         WeakReferenceMessenger.Default.Send(new AIModelInitializedMessage(this));
                         WeakReferenceMessenger.Default.Send(new ConsoleOutputMessage(ID));
-
-                        //OnConsoleChanged?.Invoke();
                     }
                 }
             }
         }
-        //public event Action OnConsoleChanged;
-
         public AIModelM(AIModelsManager manager, DateTime id, string dependenceEXEPath, int port, string modelConfigJson, string name)
         {
-            //OnConsoleChanged += () =>
-            //{
-            //    Debug.Write(Console);
-            //    Console = string.Empty;
-            //};
             _aIModelsManager = manager;
-
             ModelConfigJson = modelConfigJson;
             DependenceEXEPath = dependenceEXEPath;
             Port = port;
             Name = name;
             _id = id;
-
             ModifiableInstructionSet = [];
-
             httpClient = new HttpClient();
             httpClient.BaseAddress = new Uri($"http://127.0.0.1:{Port}");
             httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
             try
             {
-                // 构建传入参数
                 string arguments = Port.ToString();
-
                 Process = new Process
                 {
                     StartInfo = new ProcessStartInfo
@@ -93,53 +71,24 @@ namespace FacialEmotionRecognitionHub.Bus.Models
                         StandardOutputEncoding = Encoding.UTF8
                     }
                 };
-
-                // 连接控制台输出
                 Process.OutputDataReceived += Process_OutputDataReceived;
                 Process.ErrorDataReceived += Process_ErrorDataReceived;
-
-                //Process.OutputDataReceived += (s, e) =>
-                //{
-                //    if (!string.IsNullOrEmpty(e.Data))
-                //    {
-                //        //Console += "[RECEIVED]" + e.Data + "\n";
-                //        //todo
-                //        //WeakReferenceMessenger.Default.Send(new ConsoleOutputMessage
-                //        //{
-                //        //    Text = "[RECEIVED]" + e.Data + "\n"
-                //        //});
-
-
-                //        //Console += "[RECEIVED]" + e.Data + "\n";
-                //    }
-                //};
-
-                // 进程退出事件
                 Process.Exited += Process_Exited;
                 Process.EnableRaisingEvents = true;
-
-                //todo
                 Process.Start();
                 Process.BeginOutputReadLine();
                 Process.BeginErrorReadLine();
-
-
-                //return true;
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"启动失败: {ex.Message}");
-                //return false;
                 throw;
             }
         }
-
         private void Process_Exited(object sender, EventArgs e)
         {
             Debug.WriteLine("模型服务已退出");
-            //throw new NotImplementedException();
         }
-
         private void Process_ErrorDataReceived(object sender, DataReceivedEventArgs e)
         {
             if (!string.IsNullOrEmpty(e.Data))
@@ -150,27 +99,18 @@ namespace FacialEmotionRecognitionHub.Bus.Models
                     return;
                 Console += $"[GETERROR]\n>>>>>>>>>>{e.Data}\n";
             }
-            //throw new NotImplementedException();
         }
-
         private void Process_OutputDataReceived(object sender, DataReceivedEventArgs e)
         {
             if (!string.IsNullOrEmpty(e.Data))
             {
-
-                //Console += "[RECEIVED]" + e.Data + "\n";
-                //todo
                 var result = e.Data;
-
                 if (result[0] == '\uFEFF')
                 {
                     Debug.WriteLine("TRUE");
                     result = result.Substring(1);
                 }
-
-
                 Debug.WriteLine(">>>>>>>>>>>>" + result);
-
                 if (needReturnJSON)
                 {
                     try
@@ -182,36 +122,23 @@ namespace FacialEmotionRecognitionHub.Bus.Models
                         {
                             if (item.Key.Contains("total", StringComparison.CurrentCultureIgnoreCase))
                                 t = Convert.ToSingle(item.Value);
-                            //t = (float)item.Value;
                             if (item.Key.Contains("current", StringComparison.CurrentCultureIgnoreCase))
                                 c = Convert.ToSingle(item.Value);
-                            //c = (float)item.Value;
                             if (item.Key.Contains("val", StringComparison.CurrentCultureIgnoreCase) && item.Key.Contains("acc", StringComparison.CurrentCultureIgnoreCase))
                                 _accuracy = (Convert.ToSingle(item.Value) * 100).ToString("F1") + " %";
                         }
                         SetModelStatus(ModelStatus.DeterminatedProcessing, t != 0 ? c / t * 100 : 0);
-                        //WeakReferenceMessenger.Default.Send(new ModelStatusMessage());
-                        //UpdateModelStatus();
                     }
                     catch
                     {
                         Debug.WriteLine("NO JSON");
-                        //throw;
                     }
                 }
-
                 Console += $"[RECEIVED]{e.Data}\n";
-                //WeakReferenceMessenger.Default.Send(new ConsoleOutputMessage(ID));
-                
-
                 Debug.WriteLine($">>>[输出] {e.Data}");
-                // 或者更新 UI
             }
-            //throw new NotImplementedException();
         }
-
         public readonly HttpClient httpClient;
-
         private bool _showError = false;
         public bool ShowError { get { return _showError; } }
         private bool _showPaused = false;
@@ -222,19 +149,15 @@ namespace FacialEmotionRecognitionHub.Bus.Models
         public string Status { get { return _status; } }
         private string _accuracy = "--.-%";
         public string Accuracy { get { return _accuracy; } }
-
-        //private ModelStatus _status;
         public ModelStatus modelStatus = ModelStatus.Relax;
         private float _value = 0f;
         public float Value { get { return _value; } }
         private DateTime _id;
         public DateTime ID { get { return _id; } }
-
         public string Name = string.Empty;
         public string ModelConfigJson = string.Empty;
         public string DependenceEXEPath = string.Empty;
         public int Port = 0;
-
         public int RunningPort
         {
             get
@@ -242,23 +165,9 @@ namespace FacialEmotionRecognitionHub.Bus.Models
                 return Port;
             }
         }
-
-
-        //private AIModelConnectionService _aIModelConnectionService;
         public List<ModifiableInstruction> ModifiableInstructionSet;
-
-        //public AIModelM(AIModelConnectionService aIModelConnectionService, string instructionSet)
-        //{
-        //    //Name = name;
-        //    _modificationset = [];
-        //    _aIModelConnectionService = aIModelConnectionService;
-        //}
-
-
-
         public void SetModelStatus(ModelStatus target, float progress = 0f)
         {
-
             if (target == ModelStatus.Error)
             {
                 _showError = true;
@@ -281,9 +190,8 @@ namespace FacialEmotionRecognitionHub.Bus.Models
                 _isIndeterminate = true;
                 _status = "PROCESSING";
             }
-            else if(target == ModelStatus.DeterminatedProcessing)
+            else if (target == ModelStatus.DeterminatedProcessing)
             {
-                //Debug.WriteLine("))))))))))))))))))))))))))))))))))))))");
                 _showError = false;
                 _showPaused = false;
                 _isIndeterminate = false;
@@ -299,19 +207,14 @@ namespace FacialEmotionRecognitionHub.Bus.Models
                 _value = 0f;
             }
             modelStatus = target;
-
             WeakReferenceMessenger.Default.Send(new ModelStatusMessage());
         }
-
-
         public void AddNewInstruction(ModifiableInstruction newInstruction)
         {
             if (ModifiableInstructionSet is null)
                 ModifiableInstructionSet = new();
-
             if (ModifiableInstructionSet.Any(x => x.InstructionName == newInstruction.InstructionName))
             {
-                //_modificationset.First(x=>x.InstructionName == newInstruction.InstructionName) = newInstruction;
                 ModifiableInstructionSet[ModifiableInstructionSet.FindIndex(x => x.InstructionName == newInstruction.InstructionName)] = newInstruction;
             }
             else
@@ -319,12 +222,10 @@ namespace FacialEmotionRecognitionHub.Bus.Models
                 ModifiableInstructionSet.Add(newInstruction);
             }
         }
-
         public ModifiableInstruction GetInstruction(string instructionName)
         {
             if (ModifiableInstructionSet.Any(x => x.InstructionName == instructionName))
             {
-                //return _modifiableInstructionSet.First(x => x.InstructionName == instructionName);
                 return ModifiableInstructionSet[ModifiableInstructionSet.FindIndex(x => x.InstructionName == instructionName)];
             }
             else
@@ -332,29 +233,17 @@ namespace FacialEmotionRecognitionHub.Bus.Models
                 return null;
             }
         }
-
         public void Dispose()
         {
-            //Debug.WriteLine("===MODEL D");
             StopProcess();
             GC.SuppressFinalize(this);
         }
-
         private void StopProcess()
         {
             if (Process != null && !Process.HasExited)
             {
                 try
                 {
-                    //// 尝试友好关闭（发送 Ctrl+C 信号）
-                    //if (!Process.CloseMainWindow())
-                    //{
-                    //    // 强制终止
-                    //    Process.Kill();
-                    //}
-                    //Process.WaitForExit(3000);
-                    //Process.Dispose();
-
                     var killProcess = new Process
                     {
                         StartInfo = new ProcessStartInfo
@@ -368,17 +257,13 @@ namespace FacialEmotionRecognitionHub.Bus.Models
                     };
                     killProcess.Start();
                     killProcess.WaitForExit(5000);
-
-                    // 等待原进程退出
                     Process.WaitForExit(3000);
                     Process.Dispose();
                 }
                 catch (Exception ex)
                 {
-                    //todo
                     Debug.WriteLine($"停止进程失败: {ex.Message}");
                 }
-
             }
         }
     }

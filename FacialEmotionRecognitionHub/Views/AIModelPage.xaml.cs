@@ -20,7 +20,7 @@ namespace FacialEmotionRecognitionHub.Views
             VM?.GivePageCite(n);
             WeakReferenceMessenger.Default.Register<AIModelInitializedMessage>(this, (o, m) =>
             {
-                if(m.Value is AIModelM model)
+                if (m.Value is AIModelM model)
                 {
                     VM?.SetAIModelM(model);
                 }
@@ -30,14 +30,14 @@ namespace FacialEmotionRecognitionHub.Views
             {
                 DispatcherQueue.TryEnqueue(() =>
                 {
-                    if(m.ID == _id && VM is not null)
+                    if (m.ID == _id && VM is not null)
                     {
                         VM.UpdateConsole();
                     }
                 });
             });
         }
-        private event Action TerminalBlockSizeChanged;
+        private event Action? TerminalBlockSizeChanged;
         private void TerminalBlock_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             TerminalBlockSizeChanged?.Invoke();
@@ -46,7 +46,7 @@ namespace FacialEmotionRecognitionHub.Views
         {
             TerminalBlockSizeChanged += () =>
             {
-                if(sender is ScrollViewer scrollViewer)
+                if (sender is ScrollViewer scrollViewer)
                 {
                     scrollViewer.ChangeView(null, scrollViewer.ScrollableHeight, null);
                 }
