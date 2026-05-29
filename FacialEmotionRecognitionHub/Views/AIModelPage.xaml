@@ -19,7 +19,6 @@
                        SmallChange="1"
                        Margin="0,0,0,12" />
         </DataTemplate>
-
         <DataTemplate x:Key="FloatTemplate"
                       x:DataType="models:FloatParameter">
             <NumberBox Header="{x:Bind Header}"
@@ -27,14 +26,12 @@
                        SmallChange="0.01"
                        Margin="0,0,0,12" />
         </DataTemplate>
-
         <DataTemplate x:Key="BoolTemplate"
                       x:DataType="models:BoolParameter">
             <ToggleSwitch Header="{x:Bind Header}"
                           IsOn="{x:Bind Value, Mode=TwoWay}"
                           Margin="0,0,0,12" />
         </DataTemplate>
-
         <DataTemplate x:Key="PathTemplate"
                       x:DataType="models:PathParameter">
             <Grid Margin="0,0,0,12">
@@ -52,10 +49,6 @@
                          Grid.Row="1"
                          Text="{x:Bind Value, Mode=TwoWay}"
                          HorizontalAlignment="Stretch" />
-                <!--Header="{x:Bind Header}"-->
-                <!--<Button Grid.Column="1"
-                        Content="Browse..."
-                        Margin="8,18,0,0" />-->
                 <Button Grid.Column="1"
                         Grid.Row="1"
                         Margin="8,0,0,0"
@@ -64,21 +57,18 @@
                 </Button>
             </Grid>
         </DataTemplate>
-
         <models:ParameterTemplateSelector x:Key="ParamSelector"
                                           IntTemplate="{StaticResource IntTemplate}"
                                           FloatTemplate="{StaticResource FloatTemplate}"
                                           BoolTemplate="{StaticResource BoolTemplate}"
                                           PathTemplate="{StaticResource PathTemplate}" />
-
         <DataTemplate x:Key="PivotTemplate"
                       x:DataType="viewmodels:PivotItemVM">
-            <!--<PivotItem Header="{x:Bind Name}">-->
             <Grid Padding="4"
                   VerticalAlignment="Stretch">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="2*"
-                                      MaxWidth="300"/>
+                                      MaxWidth="300" />
                     <ColumnDefinition Width="5*" />
                 </Grid.ColumnDefinitions>
                 <Grid VerticalAlignment="Stretch"
@@ -90,7 +80,7 @@
                     </Grid.RowDefinitions>
                     <ScrollViewer Grid.Row="0"
                                   VerticalScrollBarVisibility="Auto"
-                                  HorizontalScrollBarVisibility="Disabled">  <!--CornerRadius="8"-->
+                                  HorizontalScrollBarVisibility="Disabled">
                         <StackPanel Spacing="16">
                             <Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
                                     BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
@@ -100,14 +90,12 @@
                                 <StackPanel Spacing="12">
                                     <TextBlock Text="Hyperparameters"
                                                Style="{StaticResource SubtitleTextBlockStyle}" />
-
                                     <ItemsControl x:Name="ParamsControl"
                                                   ItemTemplateSelector="{StaticResource ParamSelector}"
                                                   ItemsSource="{x:Bind Parameters}"
                                                   Margin="0,4,0,0" />
                                 </StackPanel>
                             </Border>
-
                         </StackPanel>
                     </ScrollViewer>
                     <Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
@@ -119,22 +107,10 @@
                             VerticalAlignment="Bottom"
                             Margin="0,12,0,0">
                         <StackPanel Spacing="12">
-                            <!--<TextBlock Text="Control Panel"
-                                       Style="{StaticResource SubtitleTextBlockStyle}" />-->
-                            <!--<TextBlock x:Name="TrainingStatusTxt"
-                                           Text="Status: Idle"
-                                           Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
-                                           FontWeight="Bold" />-->
-                            <!--<ProgressBar IsIndeterminate="False"
-                                         Value="0"
-                                         Margin="0,4,0,8"
-                                         x:Name="TrainingProgressBar" />-->
-
                             <Button Content="EXECUTE"
                                     Style="{StaticResource AccentButtonStyle}"
                                     HorizontalAlignment="Stretch"
-                                    Command="{x:Bind ExecuteCommand}"/>
-                            <!--Click="StartTrainingButton_Click"-->
+                                    Command="{x:Bind ExecuteCommand}" />
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*" />
@@ -145,26 +121,22 @@
                                         Content="{x:Bind PageVM.PromptShowed, Mode=OneWay}"
                                         HorizontalAlignment="Stretch"
                                         Margin="0,0,6,0"
-                                        Command="{x:Bind PageVM.PauseOrResumeCommand}"/>
-                                <!--Click="PauseTrainingButton_Click"-->
+                                        Command="{x:Bind PageVM.PauseOrResumeCommand}" />
                                 <Button Grid.Column="1"
                                         Content="Terminate"
                                         Foreground="Red"
                                         HorizontalAlignment="Stretch"
                                         Margin="6,0,0,0"
-                                        Command="{x:Bind PageVM.TerminateCommand}"/>
-                                <!--Click="TerminateTrainingButton_Click"-->
+                                        Command="{x:Bind PageVM.TerminateCommand}" />
                             </Grid>
                         </StackPanel>
                     </Border>
                 </Grid>
-
                 <Grid Grid.Column="1"
                       Background="#1E1E1E"
                       CornerRadius="8"
                       Padding="16"
                       VerticalAlignment="Stretch">
-                    <!--<Grid>-->
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
@@ -186,16 +158,12 @@
                                    FontFamily="Consolas"
                                    FontSize="13"
                                    LineHeight="20"
-                                   SizeChanged="TerminalBlock_SizeChanged"/>
-                        <!--Text="[INFO] Terminal initialized. Waiting for train() execution...&#x0a;[IDLE] Ready.&#x0a;>>>TEST OUTPUT."-->
+                                   SizeChanged="TerminalBlock_SizeChanged" />
                     </ScrollViewer>
-                    <!--</Grid>-->
                 </Grid>
             </Grid>
-            <!--</PivotItem>-->
         </DataTemplate>
     </Page.Resources>
-
     <Grid Padding="32"
           Height="Auto"
           VerticalAlignment="Stretch">
@@ -220,38 +188,18 @@
                          ShowPaused="{x:Bind VM.ShowPaused, Mode=OneWay}"
                          Background="{ThemeResource SystemControlForegroundBaseMediumBrush}" />
         </StackPanel>
-
-        <!--<Pivot Grid.Row="1"
-               Margin="-12,0,-12,0"
-               ItemsSource="{x:Bind VM.PivotItemVMs}"
-               ItemTemplate="{StaticResource PivotTemplate}" />-->
         <Pivot x:Name="__Pivot"
                Grid.Row="1"
                Margin="-12,0,-12,0"
                ItemsSource="{x:Bind VM.PivotItemVMs}"
                ItemTemplate="{StaticResource PivotTemplate}"
                VerticalAlignment="Stretch">
-            <!--<Pivot.Transitions>
-                <TransitionCollection>
-                    
-                </TransitionCollection>
-            </Pivot.Transitions>-->
+
             <Pivot.HeaderTemplate>
                 <DataTemplate>
                     <TextBlock Text="{Binding Name}" />
                 </DataTemplate>
             </Pivot.HeaderTemplate>
         </Pivot>
-
-        <!--<Grid Background="#FFFFFF"
-              Width="100"
-              HorizontalAlignment="Right" 
-              Grid.Row="1"
-              Height="Auto"
-              VerticalAlignment="Stretch"
-              CornerRadius="8"
-              Padding="16" />-->
-
     </Grid>
-
 </Page>
